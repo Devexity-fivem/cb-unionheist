@@ -98,6 +98,15 @@ Config.Vault = {
     debug = false,
 }
 
+Config.GasGrenades = {
+    enabled = true,
+    locations = {
+        [1] = {
+            coords = vec3(-6.18, -677.19, 15.5),
+        }
+    }
+}
+
 Config.HackLocations = {
     [1] = {
         coords = vec4(2.35, -689, 16.5, 250),
@@ -133,9 +142,40 @@ Config.DoorLocations = {
     [1] = {
         coords = vec4(-2.9891357421875, -676.64025878906, 16.358602523804, -110),
         modelHash = -1011692606,
-        size = vec3(1, 1, 2),
+        size = vec3(1.5, 0.5, 2),
+        targetModifier = vec3(0, -0.75, 0),
         pedHeading = 120,
+        explosionXModifier = -0.3,
         explosionYModifier = -1,
         debug = true,
     },
+    [2] = {
+        coords = vec4(-7.4042434692383, -678.65899658203, 16.358606338501, -20.029),
+        modelHash = -1011692606,
+        size = vec3(1.5, 0.25, 2),
+        targetModifier = vec3(0.75, -0.45, 0),
+        pedHeading = 344,
+        explosionXModifier = 0.75,
+        explosionYModifier = -0.45,
+        debug = true,
+    },
+    [3] = {
+        coords = vec4(4.3517322540283, -682.93389892578, 16.358606338501, 160.037),
+        modelHash = -1011692606,
+        size = vec3(1.5, 0.25, 2),
+        targetModifier = vec3(-0.75, 0.1, 0),
+        pedHeading = 344,
+        explosionXModifier = -0.75,
+        explosionYModifier = 0.1,
+        debug = true,
+    }
+}
+
+Config.Loot = {
+    [1] = {
+        coords = vec4(-8.8994197845459, -676.62939453125, 15.142498970032, 160.327),
+        size = vec3(1.15, 1.25, 2.75),
+        modelHash = -2022916910,
+        debug = true,
+    }
 }

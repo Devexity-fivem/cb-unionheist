@@ -1,3 +1,5 @@
+local gasCanisters = {}
+
 local function DrawText3Ds(x, y, z, text)
 	SetTextScale(0.35, 0.35)
     SetTextFont(4)
@@ -60,15 +62,12 @@ function BlowVaultDoor()
 
     local rotx, roty, rotz = table.unpack(vec3(GetEntityRotation(PlayerPedId())))
     local bagscene = NetworkCreateSynchronisedScene(vaultCoords.x-1.75, vaultCoords.y, vaultCoords.z-0.5, rotx, roty, rotz, 2, false, false, 1065353216, 0, 1.3)
-    local bag = CreateObject(GetHashKey("hei_p_m_bag_var22_arm_s"), vaultCoords.x, vaultCoords.y, vaultCoords.z, true, true, false)
-
-    SetEntityCollision(bag, false, true)
+    local bag = CreateObject(GetHashKey("hei_p_m_bag_var22_arm_s"), vaultCoords.x-1.75, vaultCoords.y, vaultCoords.z-0.5, true, true, false)
     NetworkAddPedToSynchronisedScene(ped, bagscene, "anim@heists@ornate_bank@thermal_charge", "thermal_charge", 1.2, -4.0, 1, 16, 1148846080, 0)
     NetworkAddEntityToSynchronisedScene(bag, bagscene, "anim@heists@ornate_bank@thermal_charge", "bag_thermal_charge", 4.0, -8.0, 1)
     SetPedComponentVariation(ped, 5, 0, 0, 0)
     NetworkStartSynchronisedScene(bagscene)
-    Citizen.Wait(1500)
-    Citizen.Wait(2000)
+    Citizen.Wait(3500)
     DeleteObject(bag)
     SetPedComponentVariation(ped, 5, 45, 0, 0)
     NetworkStopSynchronisedScene(bagscene)
@@ -98,26 +97,29 @@ function BlowCageDoor(cage)
     Citizen.Wait(100)
 
     local rotx, roty, rotz = table.unpack(vec3(GetEntityRotation(PlayerPedId())))
-    local bagscene = NetworkCreateSynchronisedScene(cageCoords.x, cageCoords.y, cageCoords.z, rotx, roty, rotz, 2, false, false, 1065353216, 0, 1.3)
-    local bag = CreateObject(GetHashKey("hei_p_m_bag_var22_arm_s"), cageCoords.x, cageCoords.y, cageCoords.z, true, true, false)
+    local targetModifier = Config.DoorLocations[cage].targetModifier
+    local bagscene = NetworkCreateSynchronisedScene(cageCoords.x+targetModifier.x, cageCoords.y+targetModifier.y, cageCoords.z+targetModifier.z, rotx, roty, rotz, 2, false, false, 1065353216, 0, 1.3)
 
-    SetEntityCollision(bag, false, true)
     NetworkAddPedToSynchronisedScene(ped, bagscene, "anim@heists@ornate_bank@thermal_charge", "thermal_charge", 1.2, -4.0, 1, 16, 1148846080, 0)
-    NetworkAddEntityToSynchronisedScene(bag, bagscene, "anim@heists@ornate_bank@thermal_charge", "bag_thermal_charge", 4.0, -8.0, 1)
-    SetPedComponentVariation(ped, 5, 0, 0, 0)
+    SetPedComponentVariation(ped, 5, 45, 0, 0)
     NetworkStartSynchronisedScene(bagscene)
     Citizen.Wait(3500)
-    DeleteObject(bag)
-    SetPedComponentVariation(ped, 5, 45, 0, 0)
     NetworkStopSynchronisedScene(bagscene)
     local explosionYModifier = Config.DoorLocations[cage].explosionYModifier
-    AddExplosion(cageCoords.x, cageCoords.y-1, cageCoords.z, 22, 0.8, true, false, 1)
+    local explosionXModifier = Config.DoorLocations[cage].explosionXModifier
     TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro", 8.0, 8.0, 1000, 36, 1, false, false, false)
     TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_loop", 8.0, 8.0, 3000, 49, 1, false, false, false)
     -- Add Evidence
-    --Citizen.Wait(52000)
-    --AddExplosion(cageCoords.x-1.75, cageCoords.y, cageCoords.z, 2, 0.8, true, false, 1)
-    TriggerServerEvent('cb-unionheist:server:BlowCageDoor')
+    --AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 22, 0.8, true, false, 1)
+    Citizen.Wait(5000) --TODO: Change to 52000
+    TriggerServerEvent('cb-unionheist:server:BlowCageDoor', cage)
+    --if Config.GasGrenades.enabled then
+    --    for k, v in pairs(Config.GasGrenades.locations) do
+    --        local gasCoords = v.coords
+    --        AddExplosion(gasCoords.x, gasCoords.y, gasCoords.z, 21, 1.5, true, false, 1)
+    --    end
+    --end
+    --AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 43, 0.8, true, false, 1)
     Citizen.Wait(5000)
     ClearPedTasks(ped)
 end
@@ -182,7 +184,7 @@ end
 function CreateVaultDoor()
     local vaultCoords = Config.Vault.coords
     local entity = GetClosestObjectOfType(vaultCoords.x, vaultCoords.y, vaultCoords.z, 2, -1932297301, false, false, false)
-    local hasSafeBeenBlown = lib.callback.await('cb-unionheist:server:IsSafeBlown', false)
+    local hasSafeBeenBlown = lib.callback.await('cb-unionheist:server:IsCageBlown', false)
     if not hasSafeBeenBlown then
         FreezeEntityPosition(entity, true)
         exports.ox_target:addBoxZone({
@@ -208,14 +210,15 @@ function CreateVaultDoor()
     end
 end
 
-function BlowVaultDoors()
+function CreateCageDoors()
     for k, v in pairs(Config.DoorLocations) do
         local doorCoords = Config.DoorLocations[k].coords
         local entity = GetClosestObjectOfType(doorCoords.x, doorCoords.y, doorCoords.z, 0.05, Config.DoorLocations[k].modelHash, false, false, false)
         FreezeEntityPosition(entity, true)
+        local targetModifier = Config.DoorLocations[k].targetModifier
         exports.ox_target:addBoxZone({
             name = "UnionHeist_Door_"..k,
-            coords = vec3(doorCoords.x, doorCoords.y, doorCoords.z),
+            coords = vec3(doorCoords.x+targetModifier.x, doorCoords.y+targetModifier.y, doorCoords.z+targetModifier.z),
             size = Config.DoorLocations[k].size,
             rotation = Config.DoorLocations[k].coords.w,
             debug = Config.DoorLocations[k].debug,
@@ -238,18 +241,58 @@ function BlowVaultDoors()
     end
 end
 
-RegisterNetEvent('cb-unionheist:client:BlowSafeDoor', function()
-    local hasSafeBeenBlown = lib.callback.await('cb-unionheist:server:IsSafeBlown', false)
-    if not hasSafeBeenBlown then
+function CreateLoot()
+    for k, v in pairs(Config.Loot) do
+        local lootCoords = Config.Loot[k].coords
+        exports.ox_target:addBoxZone({
+            name = "UnionHeist_Loot_"..k,
+            coords = vec3(lootCoords.x, lootCoords.y, lootCoords.z),
+            size = Config.Loot[k].size,
+            rotation = Config.Loot[k].coords.w,
+            debug = Config.Loot[k].debug,
+            options = {
+                {
+                    icon = "fa-solid fa-explosion",
+                    -- TODO: Fix all icons
+                    label = 'Steal Loot '..k,
+                    onSelect = function()
+                        print("TODO: Steal Loot")
+                    end,
+                    canInteract = function()
+                        --TODO: Item Check Here
+                        return true
+                    end,
+                    distance = 2.5,
+                }
+            }
+        })
+    end
+end
+
+RegisterNetEvent('cb-unionheist:client:BlowVaultDoor', function()
+    local vaultBlown = lib.callback.await('cb-unionheist:server:IsVaultBlown', false)
+    if not vaultBlown then
         return
     else
-        local safeCoords = Config.SafeDoor.coords
-        local entity = GetClosestObjectOfType(safeCoords.x, safeCoords.y, safeCoords.z, 2, -1932297301, false, false, false)
+        local vaultCoords = Config.Vault.coords
+        local entity = GetClosestObjectOfType(vaultCoords.x, vaultCoords.y, vaultCoords.z, 2, -1932297301, false, false, false)
         FreezeEntityPosition(entity, false)
     end
 end)
 
+RegisterNetEvent('cb-unionheist:client:BlowCageDoor', function(cage)
+    -- TODO: Check if Vault Blown too
+    local cageCoords = Config.DoorLocations[cage].coords
+    local entity = GetClosestObjectOfType(cageCoords.x, cageCoords.y, cageCoords.z, 0.05, Config.DoorLocations[cage].modelHash, false, false, false)
+    FreezeEntityPosition(entity, false)
+    --[[
+        local cageCoords = Config.DoorLocations[cage].coords
+        CreateModelHide(cageCoords.x, cageCoords.y, cageCoords.z, 0.01, Config.DoorLocations[cage].modelHash, true)
+    ]]
+end)
+
 --RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     CreateVaultDoor()
-    BlowVaultDoors()
+    CreateCageDoors()
+    CreateLoot()
 --end)

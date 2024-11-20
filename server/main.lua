@@ -1,28 +1,24 @@
-local cameraBroken = {}
-local cameras = Config.Cameras
-local safeBlown = false
-local blownUpDoors = {}
+local vaultBlown = false
+local blownCageDoors = {}
 
-RegisterNetEvent('cb-unionheist:server:BrokeCamera', function(camera)
-    cameraBroken[camera] = true
-end)
-
-RegisterNetEvent('cb-unionheist:server:BlowSafeDoor', function()
+RegisterNetEvent('cb-unionheist:server:BlowVaultDoor', function()
     -- TODO: Distance Check
-    safeBlown = true
-    TriggerClientEvent('cb-unionheist:client:BlowSafeDoor', -1)
+    vaultBlown = true
+    TriggerClientEvent('cb-unionheist:client:BlowVaultDoor', -1)
 end)
 
-RegisterNetEvent('cb-unionheist:server:BlowUpDoor', function(door)
+RegisterNetEvent('cb-unionheist:server:BlowCageDoor', function(cage)
     -- TODO: Distance Check
-    safeBlown = true
-    TriggerClientEvent('cb-unionheist:client:BlowUpDoor', -1)
+    blownCageDoors[cage] = true
+    print(blownCageDoors[cage])
+    TriggerClientEvent('cb-unionheist:client:BlowCageDoor', -1, cage)
 end)
 
-lib.callback.register('cb-unionheist:server:IsSafeBlown', function(source)
-    return safeBlown
+lib.callback.register('cb-unionheist:server:IsVaultBlown', function(source)
+    return vaultBlown
 end)
 
-lib.callback.register('cb-unionheist:server:IsSafeBlown', function(source, door)
-    return blownUpDoors[door] or false
+lib.callback.register('cb-unionheist:server:IsCageBlown', function(source, cage)
+    print(blownCageDoors[cage])
+    return blownCageDoors[cage] or false
 end)
