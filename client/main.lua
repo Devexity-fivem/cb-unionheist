@@ -276,7 +276,7 @@ function CreateLoot()
                 coords = vec3(loot.coords.x, loot.coords.y, loot.coords.z),
                 size = vec3(loot.size.x, loot.size.y, loot.size.z),
                 rotation = loot.coords.w,
-                debug = false,
+                debug = true,
                 options = {
                     {
                         icon = "fa-solid fa-mask",
