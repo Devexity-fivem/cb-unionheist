@@ -1,4 +1,5 @@
 local createdLoot = {}
+local robbedLoot = {}
 
 function DeleteNativeProps()
     for k, v in pairs(Config.DeleteProps) do
@@ -273,35 +274,64 @@ end
 
 function CreateLoot()
     local lootData = lib.callback.await('cb-unionheist:server:GetLoot', false)
-    for _, loot in pairs(lootData) do
-        print(loot.model)
-        if loot.model then -- Ensure a model is set
-            local modelHash = GetHashKey(loot.model)
-            print(modelHash)
-            local object = CreateObject(modelHash, loot.coords.x, loot.coords.y, loot.coords.z, false, false, false)
-            SetEntityRotation(object, 0, 0, loot.coords.w, 2, true)
-            FreezeEntityPosition(object, true)
-            exports.ox_target:addBoxZone({
-                name = "UnionHeist_Loot_".._,
-                coords = vec3(loot.coords.x, loot.coords.y, loot.coords.z),
-                size = vec3(loot.size.x, loot.size.y, loot.size.z),
-                rotation = loot.coords.w,
-                debug = false,
-                options = {
-                    {
-                        icon = "fa-solid fa-mask",
-                        label = 'Loot',
-                        onSelect = function()
-                            StealTrollyLoot(modelHash, loot.coords)
-                        end,
-                        canInteract = function()
-                            return true
-                        end,
-                        distance = 1,
-                    }
-                }
-            })
-            createdLoot[_] = object
+
+    if not lootData or next(lootData) == nil then
+        return
+    end
+    for key, loot in pairs(lootData) do
+        if loot.model then -- Ensure the loot has a model
+
+            local goodModel = true
+            for _, emptyModel in ipairs(Config.EmptyModels) do
+                if loot.model == emptyModel then
+                    goodModel = false
+                    break
+                end
+            end
+            -- Locate the matching Config.Loot entry for this key
+            local lootConfig = Config.Loot[key]
+            if lootConfig then
+                -- Find the matching modelData within the lootConfig
+                local modelData = nil
+                for _, data in ipairs(lootConfig.models) do
+                    if data.model == loot.model then
+                        modelData = data
+                        break
+                    end
+                end
+
+                if modelData then
+                    local modelHash = GetHashKey(loot.model)
+                    local object = CreateObject(modelHash, lootConfig.coords.x, lootConfig.coords.y, lootConfig.coords.z, false, false, false)
+                    SetEntityRotation(object, 0, 0, lootConfig.coords.w, 2, true)
+                    FreezeEntityPosition(object, true)
+                    if goodModel then
+                        exports.ox_target:addBoxZone({
+                            name = "UnionHeist_Loot_" .. key,
+                            coords = vec3(lootConfig.coords.x, lootConfig.coords.y, lootConfig.coords.z),
+                            size = vec3(lootConfig.size.x, lootConfig.size.y, lootConfig.size.z),
+                            rotation = lootConfig.coords.w,
+                            debug = false,
+                            options = {
+                                {
+                                    icon = "fa-solid fa-mask",
+                                    label = 'Loot',
+                                    onSelect = function()
+                                        StealLoot(key, modelHash, lootConfig.coords)
+                                    end,
+                                    canInteract = function()
+                                        return true
+                                    end,
+                                    distance = 1,
+                                }
+                            }
+                        })
+                    end
+
+                    -- Track the created loot object
+                    createdLoot[key] = object
+                end
+            end
         end
     end
 end
@@ -329,6 +359,57 @@ RegisterNetEvent('cb-unionheist:client:BlowCageDoor', function(cage)
             local cageCoords = Config.DoorLocations[cage].coords
             CreateModelHide(cageCoords.x, cageCoords.y, cageCoords.z, 0.01, Config.DoorLocations[cage].modelHash, true)
         ]]
+    end
+end)
+
+RegisterNetEvent('cb-unionheist:client:SyncLoot', function(lootKey, model)
+    print("[DEBUG] SyncLoot triggered")
+    print("[DEBUG] Loot Key:", lootKey, "Model:", model)
+    
+    -- Mark this loot as robbed
+    robbedLoot[lootKey] = true
+    print("[DEBUG] Marked loot as robbed:", lootKey)
+
+    if LocalPlayer.state.UnionHeist then
+        -- Ensure vault is blown, if applicable
+        print("[DEBUG] Union Heist active, processing loot.")
+        
+        local lootCoords = Config.Loot[lootKey].coords
+        print("[DEBUG] Loot Coordinates:", lootCoords)
+
+        -- Debug potential object search
+        -- Uncomment if needed for debugging
+        --local object = GetClosestObjectOfType(lootCoords.x, lootCoords.y, lootCoords.z, 0.05, GetHashKey(model), false, false, false)
+        --print("[DEBUG] Closest object:", object)
+
+        local newModel
+        local modelFound = false -- Flag to check if the model was found in the loop
+        
+        -- Iterate through models in the config
+        for k, v in pairs(Config.Loot[lootKey].models) do
+            print("[DEBUG] Checking model:", v.model, "against given model:", model)
+            if v.model == model then
+                modelFound = true
+                newModel = v.newModel
+                print("[DEBUG] Matching model found. New Model:", newModel)
+
+                -- Swap models
+                CreateModelSwap(lootCoords.x, lootCoords.y, lootCoords.z, 0.05, GetHashKey(model), GetHashKey(newModel), false)
+                print("[DEBUG] Model swap executed: From", model, "to", newModel)
+
+                -- Remove zone targeting
+                local zoneId = "UnionHeist_Loot_"..lootKey
+                print("[DEBUG] Removing zone target:", zoneId)
+                exports.ox_target:removeZone(zoneId)
+                break
+            end
+        end
+        
+        if not modelFound then
+            print("[DEBUG] No matching model found for:", model, "in lootKey:", lootKey)
+        end
+    else
+        print("[DEBUG] Union Heist is not active. SyncLoot aborted.")
     end
 end)
 
@@ -367,17 +448,60 @@ AddEventHandler('onResourceStop', function(resourceName)
     end
 end)
 
+function StealLoot(key, modelHash, coords)
+    if lib.progressBar({
+        duration = 1000, -- TODO: Bring this to the config.lua file
+        label = "Looting",
+        useWhileDead = false,
+        canCancel = true,
+        disable = {
+            car = true,
+        },
+        anim = {
+            dict = 'anim@heists@ornate_bank@grab_cash',
+            clip = 'grab'
+        },
+    }) then
+        TriggerServerEvent('cb-unionheist:server:LootStolen', key)
+    else
+        Notify("Art Heist", "You cancelled the action", "error")
+    end
+end
+
+-- TODO: Make sure everything works without the below code
+RegisterCommand("enterHeist", function()
+    LocalPlayer.state.UnionHeist = true
+    DeleteNativeProps()
+    CreateVaultDoor()
+    CreateCageDoors()
+    CreateLoot()
+end, false)
+
+RegisterCommand("exitHeist", function()
+    LocalPlayer.state.UnionHeist = false
+    DestroyVaultDoor()
+    DestroyCageDoors()
+    DestroyLoot()
+end, false)
+
+RegisterCommand("blowvault", function()
+    TriggerServerEvent('cb-unionheist:server:BlowVaultDoor')
+end, false)
+--[[
+My attempt at a synchronized scene for stealing trolly loot. Didn't really work.
+TODO: Refactor this code at a later date
+
 --- Creates a networked scene for stealing loot from a trolley during a heist.
+--- @param key integer The key of the loot being stolen
 --- @param modelHash integer Model Hash
 --- @param coords vector3 Coordinates of the trolley
-function StealTrollyLoot(modelHash, coords)
+function StealLoot(key, modelHash, coords)
     local ped = PlayerPedId()
     -- Load required model
     RequestModel(modelHash)
     while not HasModelLoaded(modelHash) do
         Wait(0)
     end
-
     -- Create object
     local trolley = GetClosestObjectOfType(coords.x, coords.y, coords.z, 1, modelHash, false, false, false)
     SetModelAsNoLongerNeeded(modelHash)
@@ -407,19 +531,4 @@ function StealTrollyLoot(modelHash, coords)
     RemoveAnimDict(animDict)
     ClearPedTasks(ped)
 end
-
--- TODO: Make sure everything works without the below code
-RegisterCommand("enterHeist", function()
-    LocalPlayer.state.UnionHeist = true
-    DeleteNativeProps()
-    CreateVaultDoor()
-    CreateCageDoors()
-    CreateLoot()
-end, false)
-
-RegisterCommand("exitHeist", function()
-    LocalPlayer.state.UnionHeist = false
-    DestroyVaultDoor()
-    DestroyCageDoors()
-    DestroyLoot()
-end, false)
+]]

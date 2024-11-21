@@ -4,6 +4,7 @@ local lootResults = {}
 local securityHacked = {}
 
 function CreateLootBasedOnChance()
+    lootResults = {} -- Initialize lootResults table
     for k, v in pairs(Config.Loot) do
         local roll = math.random(100) -- Roll a random number between 1 and 100
         local cumulativeChance = 0 -- Initialize cumulative chance
@@ -18,12 +19,13 @@ function CreateLootBasedOnChance()
             end
         end
 
-        -- Add the result for this location
-        table.insert(lootResults, {
+        -- Add the result for this location, using the key from Config.Loot
+        lootResults[k] = { -- Ensure the key in lootResults matches the Config.Loot key
             coords = v.coords,
             size = v.size,
+            cage = v.cage, -- Include cage if needed
             model = selectedModel
-        })
+        }
     end
 end
 
@@ -31,6 +33,28 @@ RegisterNetEvent('cb-unionheist:server:BlowVaultDoor', function()
     -- TODO: Distance Check
     vaultBlown = true
     TriggerClientEvent('cb-unionheist:client:BlowVaultDoor', -1)
+end)
+
+RegisterNetEvent('cb-unionheist:server:LootStolen', function(key)
+    local src = source
+    -- TODO: Distance Check
+    if vaultBlown then
+        -- TOOD: Give Rewards
+        for k, v in pairs(Config.Loot) do
+            if key == k then
+                local newModel
+                TriggerClientEvent('cb-unionheist:client:SyncLoot', -1, k, lootResults[k].model)
+                for a,b in pairs(Config.Loot[k].models) do
+                    if b.model == lootResults[k].model then
+                        newModel = b.newModel
+                    end
+                end
+                lootResults[k].model = newModel
+            end
+        end
+    else
+        return
+    end
 end)
 
 RegisterNetEvent('cb-unionheist:server:BlowCageDoor', function(cage)
