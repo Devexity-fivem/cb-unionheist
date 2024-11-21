@@ -282,12 +282,44 @@ Config.EmptyModels = {
     "prop_gold_trolly"
 }
 
+Config.LootRewards = {
+    ["prop_large_gold"] = {
+        {
+            item = "gold_bar",
+            amount = {min = 5, max = 7},
+        }
+    },
+    ["prop_large_gold_alt_a"] = {
+        {
+            item = "gold_bar",
+            amount = {min = 3, max = 5},
+        }
+    },
+    ["prop_large_gold_alt_c"] = {
+        {
+            item = "gold_bar",
+            amount = {min = 1, max = 3},
+        }
+    },
+    ["prop_cash_trolly"] = {
+        {
+            item = "cash",
+            amount = {min = 1000, max = 3000},
+        }
+    }
+}
+
+Config.MarkedBills = {
+    enabled = true -- If enabled, when the player exits the heist, a percentage of their cash will be converted to Marked Bills
+}
+
 Config.Loot = {
     [1] = {
         coords = vec4(-8.630, -676.709, 15.141, 160.327),
         size = vec3(1.65, 1.2, 3),
         cage = 1,
         models = {
+            -- THE CHANCES MUST ADD UP TO 100 EXACTLY. NOT MORE, NOT LESS. YOU WILL BREAK SHIT
             {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33}, -- 50% chance to spawn
             {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33}, -- 30% chance to spawn
             {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},  -- 20% chance to spawn
@@ -299,10 +331,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 1,
         models = {
-            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33}, -- 50% chance to spawn
-            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33}, -- 30% chance to spawn
-            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},  -- 20% chance to spawn
-            {model = 'prop_large_gold_empty', chance = 0}  -- 20% chance to spawn
+            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},
+            {model = 'prop_large_gold_empty', chance = 0}
         }
     },
     [3] = {
@@ -310,8 +342,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 1,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [4] = {
@@ -319,8 +351,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 1,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
 
@@ -330,8 +362,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [6] = {
@@ -339,8 +371,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [7] = {
@@ -348,8 +380,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [8] = {
@@ -357,8 +389,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [9] = {
@@ -366,8 +398,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
 
@@ -378,8 +410,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [11] = {
@@ -387,8 +419,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [12] = {
@@ -396,8 +428,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [13] = {
@@ -405,8 +437,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [14] = {
@@ -414,8 +446,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [15] = {
@@ -423,8 +455,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [16] = {
@@ -432,8 +464,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
 
@@ -443,8 +475,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [18] = {
@@ -452,8 +484,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [19] = {
@@ -461,8 +493,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [20] = {
@@ -470,8 +502,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [21] = {
@@ -479,8 +511,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
 
@@ -489,8 +521,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
 
@@ -500,10 +532,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 5,
         models = {
-            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33}, -- 50% chance to spawn
-            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33}, -- 30% chance to spawn
-            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},  -- 20% chance to spawn
-            {model = 'prop_large_gold_empty', chance = 0}  -- 20% chance to spawn
+            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},
+            {model = 'prop_large_gold_empty', chance = 0}
         }
     },
     [24] = {
@@ -511,10 +543,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 5,
         models = {
-            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33}, -- 50% chance to spawn
-            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33}, -- 30% chance to spawn
-            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},  -- 20% chance to spawn
-            {model = 'prop_large_gold_empty', chance = 0}  -- 20% chance to spawn
+            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},
+            {model = 'prop_large_gold_empty', chance = 0}
         }
     },
     [25] = {
@@ -522,10 +554,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 5,
         models = {
-            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33}, -- 50% chance to spawn
-            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33}, -- 30% chance to spawn
-            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},  -- 20% chance to spawn
-            {model = 'prop_large_gold_empty', chance = 0}  -- 20% chance to spawn
+            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},
+            {model = 'prop_large_gold_empty', chance = 0}
         }
     },
     [26] = {
@@ -533,8 +565,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 5,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
     [27] = {
@@ -542,8 +574,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 5,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
 
@@ -553,10 +585,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 6,
         models = {
-            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33}, -- 50% chance to spawn
-            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33}, -- 30% chance to spawn
-            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},  -- 20% chance to spawn
-            {model = 'prop_large_gold_empty', chance = 0}  -- 20% chance to spawn
+            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},
+            {model = 'prop_large_gold_empty', chance = 0}
         }
     },
     [29] = {
@@ -564,10 +596,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 6,
         models = {
-            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33}, -- 50% chance to spawn
-            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33}, -- 30% chance to spawn
-            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},  -- 20% chance to spawn
-            {model = 'prop_large_gold_empty', chance = 0}  -- 20% chance to spawn
+            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},
+            {model = 'prop_large_gold_empty', chance = 0}
         }
     },
     [30] = {
@@ -575,10 +607,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 6,
         models = {
-            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33}, -- 50% chance to spawn
-            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33}, -- 30% chance to spawn
-            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},  -- 20% chance to spawn
-            {model = 'prop_large_gold_empty', chance = 0}  -- 20% chance to spawn
+            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},
+            {model = 'prop_large_gold_empty', chance = 0}
         }
     },
     [31] = {
@@ -586,10 +618,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 6,
         models = {
-            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33}, -- 50% chance to spawn
-            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33}, -- 30% chance to spawn
-            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},  -- 20% chance to spawn
-            {model = 'prop_large_gold_empty', chance = 0}  -- 20% chance to spawn
+            {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
+            {model = 'prop_large_gold_alt_c', newModel = 'prop_large_gold_empty', chance = 34},
+            {model = 'prop_large_gold_empty', chance = 0}
         }
     },
     [32] = {
@@ -597,8 +629,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 6,
         models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60}, -- 40% chance to spawn
-            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
+            {model = 'prop_gold_trolly', chance = 40},
         }
     },
 }
