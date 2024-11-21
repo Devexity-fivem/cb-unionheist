@@ -1,5 +1,6 @@
 local createdLoot = {}
 local robbedLoot = {}
+local CreatedObjectHandles = {}
 
 function DeleteNativeProps()
     for k, v in pairs(Config.DeleteProps) do
@@ -429,7 +430,6 @@ end
 
 function DestroyCageDoors()
     for k, v in pairs(Config.DoorLocations) do
-        local doorCoords = Config.DoorLocations[k].coords
         exports.ox_target:removeZone("UnionHeist_Door_"..k)
     end
 end
@@ -468,10 +468,39 @@ function StealLoot(key, modelHash, coords)
     end
 end
 
+function UpdateExtraCageDoors()
+    -- Check if the UnionHeist state is active
+    if LocalPlayer.state.UnionHeist then
+        -- Create objects and add them to the array
+        for _, v in pairs(Config.CreatedProps) do
+            local object = CreateObject(v.modelHash, v.coords.x, v.coords.y, v.coords.z, false, false, false)
+            SetEntityHeading(object, v.coords.w)
+            FreezeEntityPosition(object, true)
+            table.insert(CreatedObjectHandles, object)
+        end
+    else
+        -- Delete all objects stored in the array
+        for _, object in pairs(CreatedObjectHandles) do
+            if DoesEntityExist(object) then
+                DeleteObject(object)
+            end
+        end
+        -- Clear the array after deletion
+        CreatedObjectHandles = {}
+
+        -- Optionally hide the models
+        for _, v in pairs(Config.CreatedProps) do
+            CreateModelHide(v.coords.x, v.coords.y, v.coords.z, 1, v.modelHash, false)
+        end
+    end
+end
+
+
 -- TODO: Make sure everything works without the below code
 RegisterCommand("enterHeist", function()
     LocalPlayer.state.UnionHeist = true
     DeleteNativeProps()
+    UpdateExtraCageDoors()
     CreateVaultDoor()
     CreateCageDoors()
     CreateLoot()
@@ -479,6 +508,7 @@ end, false)
 
 RegisterCommand("exitHeist", function()
     LocalPlayer.state.UnionHeist = false
+    UpdateExtraCageDoors()
     DestroyVaultDoor()
     DestroyCageDoors()
     DestroyLoot()

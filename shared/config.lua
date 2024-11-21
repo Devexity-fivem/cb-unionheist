@@ -150,7 +150,7 @@ Config.DoorLocations = {
         pedHeading = 120,
         explosionXModifier = -0.3,
         explosionYModifier = -1,
-        debug = true,
+        debug = false,
     },
     [2] = {
         coords = vec4(-7.4042434692383, -678.65899658203, 16.358606338501, -20.029),
@@ -161,7 +161,7 @@ Config.DoorLocations = {
         pedHeading = 344,
         explosionXModifier = 0.75,
         explosionYModifier = -0.45,
-        debug = true,
+        debug = false,
     },
     [3] = {
         coords = vec4(4.3517322540283, -682.93389892578, 16.358606338501, 160.037),
@@ -172,7 +172,7 @@ Config.DoorLocations = {
         pedHeading = 344,
         explosionXModifier = -0.75,
         explosionYModifier = 0.1,
-        debug = true,
+        debug = false,
     },
     [4] = {
         coords = vec4(2.2664833068848, -678.55090332031, 16.358602523804, -110),
@@ -183,7 +183,7 @@ Config.DoorLocations = {
         pedHeading = 254,
         explosionXModifier = -0.75,
         explosionYModifier = 0.1,
-        debug = true,
+        debug = false,
     },
     [5] = {
         coords = vec4(-0.97740650177002, -671.11315917969, 16.358602523804, -110),
@@ -194,7 +194,7 @@ Config.DoorLocations = {
         pedHeading = 72,
         explosionXModifier = -0.75,
         explosionYModifier = 0.1,
-        debug = true,
+        debug = false,
     },
     [6] = {
         coords = vec4(-3.5844497680664, -668.16436767578, 16.358606338501, -20),
@@ -205,7 +205,7 @@ Config.DoorLocations = {
         pedHeading = 162,
         explosionXModifier = -0.75,
         explosionYModifier = 0.1,
-        debug = true,
+        debug = false,
     },
     [7] = {
         coords = vec4(4.2780265808105, -673.02374267578, 16.358602523804, -110),
@@ -216,7 +216,7 @@ Config.DoorLocations = {
         pedHeading = 251,
         explosionXModifier = -0.75,
         explosionYModifier = 0.1,
-        debug = true,
+        debug = false,
     },
     [8] = {
         coords = vec4(8.1715278625488, -672.43927001953, 16.358606338501, 160.093),
@@ -227,7 +227,7 @@ Config.DoorLocations = {
         pedHeading = 170,
         explosionXModifier = -0.75,
         explosionYModifier = 0.1,
-        debug = true,
+        debug = false,
     },
     [9] = {
         coords = vec4(-1.6562347412109, -662.13287353516, 16.358602523804, -20),
@@ -238,7 +238,7 @@ Config.DoorLocations = {
         pedHeading = 340,
         explosionXModifier = -0.75,
         explosionYModifier = 0.1,
-        debug = true,
+        debug = false,
     },
     [10] = {
         coords = vec4(3.0220165252686, -660.12512207031, 16.358602523804, -110),
@@ -249,8 +249,7 @@ Config.DoorLocations = {
         pedHeading = 75,
         explosionXModifier = -0.75,
         explosionYModifier = 0.1,
-        blowUp = true, -- This is used for a couple of the doors that don't move. Instead of unfreezing the entity, we just blow it up haha
-        debug = true,
+        debug = false,
     },
     [11] = {
         coords = vec4(7.7549180984497, -663.47186279297, 16.358602523804, -110),
@@ -261,8 +260,7 @@ Config.DoorLocations = {
         pedHeading = 260,
         explosionXModifier = -0.75,
         explosionYModifier = 0.1,
-        blowUp = true, -- This is used for a couple of the doors that don't move. Instead of unfreezing the entity, we just blow it up haha
-        debug = true,
+        debug = false,
     },
     [12] = {
         coords = vec4(10.572834014893, -666.58392333984, 16.358604431152, 160),
@@ -273,7 +271,7 @@ Config.DoorLocations = {
         pedHeading = 350,
         explosionXModifier = -0.75,
         explosionYModifier = 0.1,
-        debug = true,
+        debug = false,
     }
 }
 
@@ -886,5 +884,42 @@ Config.DeleteProps = {
     [59] = {
         coords = vec3(12.652680397034, -665.30755615234, 15.219604492188),
         modelHash = 307713837,
+    },
+
+    -- Default Vault Cages
+    [60] = {
+        coords = vec3(2.759575843811, -660.84271240234, 16.734586715698),
+        modelHash = 1450792563,
+    },
+    [61] = {
+        coords = vec3(3.0220165252686, -660.12512207031, 16.358602523804),
+        modelHash = -275220570,
+    },
+    [62] = {
+        coords = vec3(8.0159044265747, -662.75482177734, 16.734586715698),
+        modelHash = -463637955,
+    },
+    [63] = {
+        coords = vec3(7.7549180984497, -663.47186279297, 16.358602523804),
+        modelHash = -275220570,
+    },
+}
+
+Config.CreatedProps = {
+    [1] = {
+        coords = vec4(2.759575843811, -660.84271240234, 15.135160827637, -20),
+        modelHash = 1450792563,
+    },
+    [2] = {
+        coords = vec4(3.0220165252686, -660.12512207031, 15.135160827637, -20),
+        modelHash = -275220570,
+    },
+    [3] = {
+        coords = vec4(8.0159044265747, -662.75482177734, 15.135160827637, -20),
+        modelHash = 1450792563,
+    },
+    [4] = {
+        coords = vec4(8.2881555557251, -662.03924560547, 15.135160827637, -20),
+        modelHash = -275220570,
     },
 }
