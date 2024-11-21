@@ -4,7 +4,6 @@ local lootResults = {}
 local securityHacked = {}
 
 function CreateLootBasedOnChance()
-    print("here")
     for k, v in pairs(Config.Loot) do
         local roll = math.random(100) -- Roll a random number between 1 and 100
         local cumulativeChance = 0 -- Initialize cumulative chance
@@ -14,9 +13,7 @@ function CreateLootBasedOnChance()
         for _, modelData in ipairs(v.models) do
             cumulativeChance = cumulativeChance + modelData.chance
             if roll <= cumulativeChance then
-                print(modelData.modelHash)
-                print(roll, cumulativeChance)
-                selectedModel = modelData.modelHash
+                selectedModel = modelData.model
                 break
             end
         end
@@ -25,7 +22,7 @@ function CreateLootBasedOnChance()
         table.insert(lootResults, {
             coords = v.coords,
             size = v.size,
-            modelHash = selectedModel -- May be nil if no model is selected
+            model = selectedModel
         })
     end
 end

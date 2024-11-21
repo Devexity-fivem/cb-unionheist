@@ -274,8 +274,11 @@ end
 function CreateLoot()
     local lootData = lib.callback.await('cb-unionheist:server:GetLoot', false)
     for _, loot in pairs(lootData) do
-        if loot.modelHash then -- Ensure a model is set
-            local object = CreateObject(loot.modelHash, loot.coords.x, loot.coords.y, loot.coords.z, false, false, false)
+        print(loot.model)
+        if loot.model then -- Ensure a model is set
+            local modelHash = GetHashKey(loot.model)
+            print(modelHash)
+            local object = CreateObject(modelHash, loot.coords.x, loot.coords.y, loot.coords.z, false, false, false)
             SetEntityRotation(object, 0, 0, loot.coords.w, 2, true)
             FreezeEntityPosition(object, true)
             exports.ox_target:addBoxZone({
@@ -289,7 +292,7 @@ function CreateLoot()
                         icon = "fa-solid fa-mask",
                         label = 'Loot',
                         onSelect = function()
-                            StealTrollyLoot(loot.modelHash, loot.coords)
+                            StealTrollyLoot(modelHash, loot.coords)
                         end,
                         canInteract = function()
                             return true
@@ -365,7 +368,7 @@ AddEventHandler('onResourceStop', function(resourceName)
 end)
 
 --- Creates a networked scene for stealing loot from a trolley during a heist.
---- @param modelHash string Model of the trolley
+--- @param modelHash integer Model Hash
 --- @param coords vector3 Coordinates of the trolley
 function StealTrollyLoot(modelHash, coords)
     local ped = PlayerPedId()

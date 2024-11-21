@@ -283,10 +283,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 1,
         models = {
-            {modelHash = 1483319544, chance = 20}, -- 50% chance to spawn
-            {modelHash = -1802035584, chance = 10}, -- 30% chance to spawn
-            {modelHash = -1324034181, chance = 10},  -- 20% chance to spawn
-            {modelHash = -1479600188, chance = 60}  -- 20% chance to spawn
+            {model = 'prop_large_gold', chance = 20}, -- 50% chance to spawn
+            {model = 'prop_large_gold_alt_a', chance = 10}, -- 30% chance to spawn
+            {model = 'prop_large_gold_alt_c', chance = 10},  -- 20% chance to spawn
+            {model = 'prop_large_gold_empty', chance = 60}  -- 20% chance to spawn
         }
     },
     [2] = {
@@ -294,10 +294,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 1,
         models = {
-            {modelHash = 1483319544, chance = 20}, -- 50% chance to spawn
-            {modelHash = -1802035584, chance = 10}, -- 30% chance to spawn
-            {modelHash = -1324034181, chance = 10},  -- 20% chance to spawn
-            {modelHash = -1479600188, chance = 60}  -- 20% chance to spawn
+            {model = 'prop_large_gold', chance = 20}, -- 50% chance to spawn
+            {model = 'prop_large_gold_alt_a', chance = 10}, -- 30% chance to spawn
+            {model = 'prop_large_gold_alt_c', chance = 10},  -- 20% chance to spawn
+            {model = 'prop_large_gold_empty', chance = 60}  -- 20% chance to spawn
         }
     },
     [3] = {
@@ -305,8 +305,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 1,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [4] = {
@@ -314,8 +314,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 1,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
 
@@ -325,8 +325,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [6] = {
@@ -334,8 +334,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [7] = {
@@ -343,8 +343,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [8] = {
@@ -352,8 +352,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [9] = {
@@ -361,8 +361,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
 
@@ -373,8 +373,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [11] = {
@@ -382,8 +382,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [12] = {
@@ -391,8 +391,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [13] = {
@@ -400,8 +400,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [14] = {
@@ -409,8 +409,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [15] = {
@@ -418,8 +418,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [16] = {
@@ -427,8 +427,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
 
@@ -438,8 +438,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [18] = {
@@ -447,8 +447,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [19] = {
@@ -456,8 +456,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [20] = {
@@ -465,8 +465,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [21] = {
@@ -474,8 +474,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
 
@@ -484,8 +484,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
 
@@ -495,10 +495,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 5,
         models = {
-            {modelHash = 1483319544, chance = 20}, -- 50% chance to spawn
-            {modelHash = -1802035584, chance = 10}, -- 30% chance to spawn
-            {modelHash = -1324034181, chance = 10},  -- 20% chance to spawn
-            {modelHash = -1479600188, chance = 60}  -- 20% chance to spawn
+            {model = 'prop_large_gold', chance = 20}, -- 50% chance to spawn
+            {model = 'prop_large_gold_alt_a', chance = 10}, -- 30% chance to spawn
+            {model = 'prop_large_gold_alt_c', chance = 10},  -- 20% chance to spawn
+            {model = 'prop_large_gold_empty', chance = 60}  -- 20% chance to spawn
         }
     },
     [24] = {
@@ -506,10 +506,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 5,
         models = {
-            {modelHash = 1483319544, chance = 20}, -- 50% chance to spawn
-            {modelHash = -1802035584, chance = 10}, -- 30% chance to spawn
-            {modelHash = -1324034181, chance = 10},  -- 20% chance to spawn
-            {modelHash = -1479600188, chance = 60}  -- 20% chance to spawn
+            {model = 'prop_large_gold', chance = 20}, -- 50% chance to spawn
+            {model = 'prop_large_gold_alt_a', chance = 10}, -- 30% chance to spawn
+            {model = 'prop_large_gold_alt_c', chance = 10},  -- 20% chance to spawn
+            {model = 'prop_large_gold_empty', chance = 60}  -- 20% chance to spawn
         }
     },
     [25] = {
@@ -517,10 +517,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 5,
         models = {
-            {modelHash = 1483319544, chance = 20}, -- 50% chance to spawn
-            {modelHash = -1802035584, chance = 10}, -- 30% chance to spawn
-            {modelHash = -1324034181, chance = 10},  -- 20% chance to spawn
-            {modelHash = -1479600188, chance = 60}  -- 20% chance to spawn
+            {model = 'prop_large_gold', chance = 20}, -- 50% chance to spawn
+            {model = 'prop_large_gold_alt_a', chance = 10}, -- 30% chance to spawn
+            {model = 'prop_large_gold_alt_c', chance = 10},  -- 20% chance to spawn
+            {model = 'prop_large_gold_empty', chance = 60}  -- 20% chance to spawn
         }
     },
     [26] = {
@@ -528,8 +528,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 5,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
     [27] = {
@@ -537,8 +537,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 5,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
 
@@ -548,10 +548,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 6,
         models = {
-            {modelHash = 1483319544, chance = 20}, -- 50% chance to spawn
-            {modelHash = -1802035584, chance = 10}, -- 30% chance to spawn
-            {modelHash = -1324034181, chance = 10},  -- 20% chance to spawn
-            {modelHash = -1479600188, chance = 60}  -- 20% chance to spawn
+            {model = 'prop_large_gold', chance = 20}, -- 50% chance to spawn
+            {model = 'prop_large_gold_alt_a', chance = 10}, -- 30% chance to spawn
+            {model = 'prop_large_gold_alt_c', chance = 10},  -- 20% chance to spawn
+            {model = 'prop_large_gold_empty', chance = 60}  -- 20% chance to spawn
         }
     },
     [29] = {
@@ -559,10 +559,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 6,
         models = {
-            {modelHash = 1483319544, chance = 20}, -- 50% chance to spawn
-            {modelHash = -1802035584, chance = 10}, -- 30% chance to spawn
-            {modelHash = -1324034181, chance = 10},  -- 20% chance to spawn
-            {modelHash = -1479600188, chance = 60}  -- 20% chance to spawn
+            {model = 'prop_large_gold', chance = 20}, -- 50% chance to spawn
+            {model = 'prop_large_gold_alt_a', chance = 10}, -- 30% chance to spawn
+            {model = 'prop_large_gold_alt_c', chance = 10},  -- 20% chance to spawn
+            {model = 'prop_large_gold_empty', chance = 60}  -- 20% chance to spawn
         }
     },
     [30] = {
@@ -570,10 +570,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 6,
         models = {
-            {modelHash = 1483319544, chance = 20}, -- 50% chance to spawn
-            {modelHash = -1802035584, chance = 10}, -- 30% chance to spawn
-            {modelHash = -1324034181, chance = 10},  -- 20% chance to spawn
-            {modelHash = -1479600188, chance = 60}  -- 20% chance to spawn
+            {model = 'prop_large_gold', chance = 20}, -- 50% chance to spawn
+            {model = 'prop_large_gold_alt_a', chance = 10}, -- 30% chance to spawn
+            {model = 'prop_large_gold_alt_c', chance = 10},  -- 20% chance to spawn
+            {model = 'prop_large_gold_empty', chance = 60}  -- 20% chance to spawn
         }
     },
     [31] = {
@@ -581,10 +581,10 @@ Config.Loot = {
         size = vec3(1.65, 1.2, 3),
         cage = 6,
         models = {
-            {modelHash = 1483319544, chance = 20}, -- 50% chance to spawn
-            {modelHash = -1802035584, chance = 10}, -- 30% chance to spawn
-            {modelHash = -1324034181, chance = 10},  -- 20% chance to spawn
-            {modelHash = -1479600188, chance = 60}  -- 20% chance to spawn
+            {model = 'prop_large_gold', chance = 20}, -- 50% chance to spawn
+            {model = 'prop_large_gold_alt_a', chance = 10}, -- 30% chance to spawn
+            {model = 'prop_large_gold_alt_c', chance = 10},  -- 20% chance to spawn
+            {model = 'prop_large_gold_empty', chance = 60}  -- 20% chance to spawn
         }
     },
     [32] = {
@@ -592,8 +592,8 @@ Config.Loot = {
         size = vec3(1.05, 0.8, 2.1),
         cage = 6,
         models = {
-            {modelHash = 929864185, chance = 60}, -- 40% chance to spawn
-            {modelHash = -1326042488, chance = 40}, -- 40% chance to spawn
+            {model = 'prop_cash_trolly', chance = 60}, -- 40% chance to spawn
+            {model = 'prop_gold_trolly', chance = 40}, -- 40% chance to spawn
         }
     },
 
@@ -643,7 +643,7 @@ Config.DeleteProps = {
     -- Cage 2
     [10] = {
         coords = vec3(3.551908493042, -677.45397949219, 15.602298736572),
-        modelHash = 929864185,
+        model = 'prop_cash_trolly',
     },
     [11] = {
         coords = vec3(5.7710666656494, -678.46520996094, 15.138112068176),
@@ -749,11 +749,11 @@ Config.DeleteProps = {
     -- Cage 4
     [35] = {
         coords = vec3(4.0107975006104, -676.3271484375, 15.602298736572),
-        modelHash = 929864185,
+        model = 'prop_cash_trolly',
     },
     [36] = {
         coords = vec3(4.9934139251709, -676.68444824219, 15.602298736572),
-        modelHash = 929864185,
+        model = 'prop_cash_trolly',
     },
     [37] = {
         coords = vec3(6.2821359634399, -677.07763671875, 15.220226287842),
@@ -765,11 +765,11 @@ Config.DeleteProps = {
     },
     [39] = {
         coords = vec3(7.7815361022949, -676.47741699219, 15.602298736572),
-        modelHash = 929864185,
+        model = 'prop_cash_trolly',
     },
     [40] = {
         coords = vec3(8.8905487060547, -676.73675537109, 15.602298736572),
-        modelHash = 929864185,
+        model = 'prop_cash_trolly',
     },
     [41] = {
         coords = vec3(9.3162937164307, -675.1201171875, 15.220423698425),
@@ -791,7 +791,7 @@ Config.DeleteProps = {
     -- Cage 5
     [45] = {
         coords = vec3(-1.7896595001221, -661.14086914062, 15.602298736572),
-        modelHash = -1326042488,
+        model = 'prop_gold_trolly',
     },
     [46] = {
         coords = vec3(-2.7442359924316, -660.72412109375, 15.132097244263),
@@ -807,11 +807,11 @@ Config.DeleteProps = {
     },
     [49] = {
         coords = vec3(1.9007949829102, -657.33312988281, 15.602298736572),
-        modelHash = -1326042488,
+        model = 'prop_gold_trolly',
     },
     [50] = {
         coords = vec3(2.8146457672119, -657.8837890625, 15.602298736572),
-        modelHash = -1326042488,
+        model = 'prop_gold_trolly',
     },
     
     -- Cage 6
@@ -821,11 +821,11 @@ Config.DeleteProps = {
     },
     [52] = {
         coords = vec3(10.905244827271, -661.34417724609, 15.602298736572),
-        modelHash = -1326042488,
+        model = 'prop_gold_trolly',
     },
     [53] = {
         coords = vec3(11.040008544922, -660.60040283203, 15.602298736572),
-        modelHash = -1326042488,
+        model = 'prop_gold_trolly',
     },
     [54] = {
         coords = vec3(12.116771697998, -661.30718994141, 15.132097244263),
@@ -837,7 +837,7 @@ Config.DeleteProps = {
     },
     [56] = {
         coords = vec3(12.630909919739, -662.67120361328, 15.60470199585),
-        modelHash = -1326042488,
+        model = 'prop_gold_trolly',
     },
     [57] = {
         coords = vec3(13.523837089539, -663.03277587891, 15.220226287842),
