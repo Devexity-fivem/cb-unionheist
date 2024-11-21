@@ -1,6 +1,7 @@
 local vaultBlown = false
 local blownCageDoors = {}
 local lootResults = {}
+local securityHacked = {}
 
 function CreateLootBasedOnChance()
     print("here")
@@ -44,6 +45,15 @@ end)
 
 lib.callback.register('cb-unionheist:server:IsVaultBlown', function(source)
     return vaultBlown
+end)
+
+lib.callback.register('cb-unionheist:server:IsSecurityHacked', function(source)
+    for k, v in pairs(Config.HackLocations) do
+        if not securityHacked[k] then
+            return false
+        end
+    end
+    return true
 end)
 
 lib.callback.register('cb-unionheist:server:IsCageBlown', function(source, cage)
