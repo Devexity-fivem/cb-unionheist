@@ -1,6 +1,7 @@
 local createdLoot = {}
 local robbedLoot = {}
 local CreatedObjectHandles = {}
+local cageDoorBlown = {}
 
 function DeleteNativeProps()
     for k, v in pairs(Config.DeleteProps) do
@@ -50,8 +51,10 @@ function SpawnMissionPeds()
                 return IsEntityDead(entity)
             end,
             onSelect = function()
-                print("TODO: Rob Guard")
-                DeleteEntity(ped)
+                local robbed = lib.callback.await('cb-unionheist:server:RobGuard', false, k)
+                if not robbed then
+                    Notify("Already Robbed", "This guard has already been robbed!", "error")
+                end
             end,
         })
     end
@@ -96,6 +99,38 @@ function BlowVaultDoor()
     end
 end
 
+function SecurityHackAnim(hack)
+    if LocalPlayer.state.UnionHeist then
+        local hackCoords = Config.HackLocations[hack].coords
+        RequestAnimDict("anim@scripted@charlie_missions@mission_5@ig1_avi_hacking@")
+        while not HasAnimDictLoaded("anim@scripted@charlie_missions@mission_5@ig1_avi_hacking@") do
+            Wait(50)
+        end
+        local ped = PlayerPedId()
+        SetEntityHeading(ped, Config.HackLocations[hack].pedHeading)
+        Wait(100)
+
+        local rotx, roty, rotz = table.unpack(vec3(GetEntityRotation(PlayerPedId())))
+        local animModifier = Config.HackLocations[hack].animModifier
+        local bagscene = NetworkCreateSynchronisedScene(hackCoords.x+animModifier.x, hackCoords.y+animModifier.y, hackCoords.z+animModifier.z, rotx, roty, rotz, 2, false, false, 1065353216, 0, 1.3)
+        NetworkAddPedToSynchronisedScene(ped, bagscene, "anim@scripted@charlie_missions@mission_5@ig1_avi_hacking@", "hack", 1.2, -4.0, 1, 16, 1148846080, 0)
+        NetworkStartSynchronisedScene(bagscene)
+        local success = lib.skillCheck({'easy', 'easy', 'easy'}, {'w', 'a', 's', 'd'})
+        if success then
+            TriggerServerEvent('cb-unionheist:server:SecurityHack', hack)
+        end
+        NetworkStopSynchronisedScene(bagscene)
+        --AddExplosion(vaultCoords.x-1.75, vaultCoords.y+0.8, vaultCoords.z, 22, 0.8, true, false, 1)
+        -- Add Evidence
+        --Wait(52000)
+        --AddExplosion(vaultCoords.x-1.75, vaultCoords.y, vaultCoords.z, 2, 0.8, true, false, 1)
+        Wait(5000)
+        ClearPedTasks(ped)
+    else
+        Notify("Headaches", "You need to exit the depository and re-enter!", "error")
+    end
+end
+
 function BlowCageDoor(cage)
     if LocalPlayer.state.UnionHeist then
         local cageCoords = Config.DoorLocations[cage].coords
@@ -125,7 +160,7 @@ function BlowCageDoor(cage)
         TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_loop", 8.0, 8.0, 3000, 49, 1, false, false, false)
         -- Add Evidence
         AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 22, 0.8, true, false, 1)
-        Wait(52000) --TODO: Change to 52000
+        Wait(5000) --TODO: Change to 52000
         TriggerServerEvent('cb-unionheist:server:BlowCageDoor', cage)
         if Config.GasGrenades.enabled then
             for k, v in pairs(Config.GasGrenades.locations) do
@@ -133,7 +168,9 @@ function BlowCageDoor(cage)
                 AddExplosion(gasCoords.x, gasCoords.y, gasCoords.z, 21, 1.5, true, false, 1)
             end
         end
-        AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 43, 0.8, true, false, 1)
+        if Config.DoorLocations[cage].blowUp then
+            AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 43, 0.8, true, false, 1)
+        end
         ClearPedTasks(ped)
     else
         Notify("Headaches", "You need to exit the depository and re-enter!", "error")
@@ -194,7 +231,7 @@ for k, v in pairs(Config.HackLocations) do
                 icon = "fa-solid fa-mobile",
                 label = 'Hack Vault Security '..k,
                 onSelect = function()
-                    TriggerServerEvent('cb-unionheist:server:SecurityHack', k)
+                    SecurityHackAnim(k)
                 end,
                 canInteract = function()
                     return HasItemClient(Config.HackLocations[k].required.item, Config.HackLocations[k].required.amount)
@@ -222,15 +259,12 @@ function CreateVaultDoor()
                     icon = "fa-solid fa-mobile",
                     label = 'Blow Vault Door',
                     onSelect = function()
-                        BlowVaultDoor()
-                        --[[
                         local securityHacked = lib.callback.await('cb-unionheist:server:IsSecurityHacked', false)
                         if securityHacked then
                             BlowVaultDoor()
                         else
                             Notify("Vault Security", "Take out the security system first!", "error")
                         end
-                        ]]
                     end,
                     canInteract = function()
                         return true -- TODO: require item
@@ -243,33 +277,36 @@ function CreateVaultDoor()
 end
 
 function CreateCageDoors()
+    local blownCages = lib.callback.await('cb-unionheist:server:GetBlownCages', false)
     for k, v in pairs(Config.DoorLocations) do
-        local doorCoords = Config.DoorLocations[k].coords
-        local entity = GetClosestObjectOfType(doorCoords.x, doorCoords.y, doorCoords.z, 0.05, Config.DoorLocations[k].modelHash, false, false, false)
-        FreezeEntityPosition(entity, true)
-        local targetModifier = Config.DoorLocations[k].targetModifier
-        exports.ox_target:addBoxZone({
-            name = "UnionHeist_Door_"..k,
-            coords = vec3(doorCoords.x+targetModifier.x, doorCoords.y+targetModifier.y, doorCoords.z+targetModifier.z),
-            size = Config.DoorLocations[k].size,
-            rotation = Config.DoorLocations[k].coords.w,
-            debug = Config.DoorLocations[k].debug,
-            options = {
-                {
-                    icon = "fa-solid fa-explosion",
-                    -- TODO: Fix all icons
-                    label = 'Blow Cage Door '..k,
-                    onSelect = function()
-                        BlowCageDoor(k)
-                    end,
-                    canInteract = function()
-                        --TODO: Item Check Here
-                        return true
-                    end,
-                    distance = 2.5,
+        if not blownCages[k] then
+            local doorCoords = Config.DoorLocations[k].coords
+            local entity = GetClosestObjectOfType(doorCoords.x, doorCoords.y, doorCoords.z, 0.05, Config.DoorLocations[k].modelHash, false, false, false)
+            FreezeEntityPosition(entity, true)
+            local targetModifier = Config.DoorLocations[k].targetModifier
+            exports.ox_target:addBoxZone({
+                name = "UnionHeist_Door_"..k,
+                coords = vec3(doorCoords.x+targetModifier.x, doorCoords.y+targetModifier.y, doorCoords.z+targetModifier.z),
+                size = Config.DoorLocations[k].size,
+                rotation = Config.DoorLocations[k].coords.w,
+                debug = Config.DoorLocations[k].debug,
+                options = {
+                    {
+                        icon = "fa-solid fa-explosion",
+                        -- TODO: Fix all icons
+                        label = 'Blow Cage Door '..k,
+                        onSelect = function()
+                            BlowCageDoor(k)
+                        end,
+                        canInteract = function()
+                            --TODO: Item Check Here
+                            return true
+                        end,
+                        distance = 2.5,
+                    }
                 }
-            }
-        })
+            })
+        end
     end
 end
 
@@ -316,9 +353,14 @@ function CreateLoot()
                             options = {
                                 {
                                     icon = "fa-solid fa-mask",
-                                    label = 'Loot',
+                                    label = 'Loot'..key,
                                     onSelect = function()
-                                        StealLoot(key, modelHash, lootConfig.coords)
+                                        print(lootConfig.cage)
+                                        local cageBlown = lib.callback.await('cb-unionheist:server:IsCageRoomBlown', false, lootConfig.cage)
+                                        print(cageBlown)
+                                        if cageBlown then
+                                            StealLoot(key, modelHash, lootConfig.coords)
+                                        end
                                     end,
                                     canInteract = function()
                                         return true
@@ -352,65 +394,33 @@ end)
 
 RegisterNetEvent('cb-unionheist:client:BlowCageDoor', function(cage)
     if LocalPlayer.state.UnionHeist then
-        -- TODO: Check if Vault Blown too
         local cageCoords = Config.DoorLocations[cage].coords
         local entity = GetClosestObjectOfType(cageCoords.x, cageCoords.y, cageCoords.z, 0.05, Config.DoorLocations[cage].modelHash, false, false, false)
-        FreezeEntityPosition(entity, false)
-        --[[
-            local cageCoords = Config.DoorLocations[cage].coords
-            CreateModelHide(cageCoords.x, cageCoords.y, cageCoords.z, 0.01, Config.DoorLocations[cage].modelHash, true)
-        ]]
+        CreateModelHide(cageCoords.x, cageCoords.y, cageCoords.z, 0.05, Config.DoorLocations[cage].modelHash, false)
+        --FreezeEntityPosition(entity, false)
     end
 end)
 
-RegisterNetEvent('cb-unionheist:client:SyncLoot', function(lootKey, model)
-    print("[DEBUG] SyncLoot triggered")
-    print("[DEBUG] Loot Key:", lootKey, "Model:", model)
-    
+RegisterNetEvent('cb-unionheist:client:SyncLoot', function(lootKey, model)    
     -- Mark this loot as robbed
     robbedLoot[lootKey] = true
-    print("[DEBUG] Marked loot as robbed:", lootKey)
-
     if LocalPlayer.state.UnionHeist then
-        -- Ensure vault is blown, if applicable
-        print("[DEBUG] Union Heist active, processing loot.")
-        
+        -- Ensure vault is blown, if applicable        
         local lootCoords = Config.Loot[lootKey].coords
-        print("[DEBUG] Loot Coordinates:", lootCoords)
-
-        -- Debug potential object search
-        -- Uncomment if needed for debugging
-        --local object = GetClosestObjectOfType(lootCoords.x, lootCoords.y, lootCoords.z, 0.05, GetHashKey(model), false, false, false)
-        --print("[DEBUG] Closest object:", object)
-
         local newModel
-        local modelFound = false -- Flag to check if the model was found in the loop
         
         -- Iterate through models in the config
         for k, v in pairs(Config.Loot[lootKey].models) do
-            print("[DEBUG] Checking model:", v.model, "against given model:", model)
             if v.model == model then
-                modelFound = true
                 newModel = v.newModel
-                print("[DEBUG] Matching model found. New Model:", newModel)
-
                 -- Swap models
                 CreateModelSwap(lootCoords.x, lootCoords.y, lootCoords.z, 0.05, GetHashKey(model), GetHashKey(newModel), false)
-                print("[DEBUG] Model swap executed: From", model, "to", newModel)
-
                 -- Remove zone targeting
                 local zoneId = "UnionHeist_Loot_"..lootKey
-                print("[DEBUG] Removing zone target:", zoneId)
                 exports.ox_target:removeZone(zoneId)
                 break
             end
         end
-        
-        if not modelFound then
-            print("[DEBUG] No matching model found for:", model, "in lootKey:", lootKey)
-        end
-    else
-        print("[DEBUG] Union Heist is not active. SyncLoot aborted.")
     end
 end)
 
@@ -469,17 +479,24 @@ function StealLoot(key, modelHash, coords)
 end
 
 function UpdateExtraCageDoors()
-    -- Check if the UnionHeist state is active
     if LocalPlayer.state.UnionHeist then
-        -- Create objects and add them to the array
-        for _, v in pairs(Config.CreatedProps) do
-            local object = CreateObject(v.modelHash, v.coords.x, v.coords.y, v.coords.z, false, false, false)
-            SetEntityHeading(object, v.coords.w)
-            FreezeEntityPosition(object, true)
-            table.insert(CreatedObjectHandles, object)
+        for k, v in pairs(Config.DoorLocations) do
+            if v.specialDoor then
+                local cageBlown = lib.callback.await('cb-unionheist:server:IsCageBlown', false, k)
+                if not cageBlown then
+                    for _, q in pairs(Config.CreatedProps) do
+                        if k == q.cageDoor then
+                            local object = CreateObject(q.modelHash, q.coords.x, q.coords.y, q.coords.z, false, false, false)
+                            SetEntityHeading(object, q.coords.w)
+                            FreezeEntityPosition(object, true)
+                            table.insert(CreatedObjectHandles, object)
+                        end
+                    end
+                end
+            end
         end
+
     else
-        -- Delete all objects stored in the array
         for _, object in pairs(CreatedObjectHandles) do
             if DoesEntityExist(object) then
                 DeleteObject(object)
@@ -516,6 +533,10 @@ end, false)
 
 RegisterCommand("blowvault", function()
     TriggerServerEvent('cb-unionheist:server:BlowVaultDoor')
+end, false)
+
+RegisterCommand("blowDoor", function()
+    TriggerServerEvent('cb-unionheist:server:BlowCageDoor', 10)
 end, false)
 --[[
 My attempt at a synchronized scene for stealing trolly loot. Didn't really work.

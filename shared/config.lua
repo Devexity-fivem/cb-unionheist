@@ -39,7 +39,8 @@ Config.Guards = {
         armor = 100,
         combatMovement = 2, -- {0 = Stationary | 1 = Defensive | 2 = Offensive | 3 = Suicidal Offensive}
         rewards = {
-            [1] = {item = "thermite", amount = 1, chance = 50},
+            [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
+            [2] = {item = "ammo-rifle2", minAmount = 1, maxAmount = 1, chance = 20},
         }
     },
     --[[
@@ -113,31 +114,38 @@ Config.HackLocations = {
         size = vec3(1, 0.5, 2),
         label = "Blow Up",
         required = {item = "electronickit", amount = 1},
-        debug = true,
+        animModifier = vec3(0, 0, -0.4),
+        pedHeading = 80,
+        debug = false,
     },
-    --[[
     [2] = {
         coords = vec4(-5.40, -700.61, 16.5, 161.25),
         size = vec3(1, 0.5, 2),
         label = "Blow Up",
         required = {item = "electronickit", amount = 1},
-        debug = true,
+        animModifier = vec3(0.0, 0.0, -0.4),
+        pedHeading = 345,
+        debug = false,
     },
     [3] = {
         coords = vec4(2.2, -698.17, 16.5, 341.49),
         size = vec3(1, 0.5, 2),
         label = "Blow Up",
         required = {item = "electronickit", amount = 1},
-        debug = true,
+        animModifier = vec3(0.0, 0.0, -0.4),
+        pedHeading = 150,
+
+        debug = false,
     },
     [4] = {
         coords = vec4(10, -707.05, 16.5, 254.05),
         size = vec3(1, 0.5, 2),
         label = "Blow Up",
         required = {item = "electronickit", amount = 1},
-        debug = true,
+        animModifier = vec3(0.0, 0.0, -0.4),
+        pedHeading = 80,
+        debug = false,
     }
-    ]]
 }
 
 Config.DoorLocations = {
@@ -150,6 +158,7 @@ Config.DoorLocations = {
         pedHeading = 120,
         explosionXModifier = -0.3,
         explosionYModifier = -1,
+        blowUp = true,
         debug = false,
     },
     [2] = {
@@ -157,10 +166,11 @@ Config.DoorLocations = {
         modelHash = -1011692606,
         size = vec3(1.5, 0.25, 2),
         cage = 1,
-        targetModifier = vec3(0.75, -0.45, 0),
+        targetModifier = vec3(0.75, -0.35, 0),
         pedHeading = 344,
         explosionXModifier = 0.75,
-        explosionYModifier = -0.45,
+        explosionYModifier = -0.35,
+        blowUp = true,
         debug = false,
     },
     [3] = {
@@ -171,7 +181,8 @@ Config.DoorLocations = {
         targetModifier = vec3(-0.75, 0.1, 0),
         pedHeading = 344,
         explosionXModifier = -0.75,
-        explosionYModifier = 0.1,
+        explosionYModifier = 0.25,
+        blowUp = true,
         debug = false,
     },
     [4] = {
@@ -181,8 +192,9 @@ Config.DoorLocations = {
         cage = 2,
         targetModifier = vec3(-0.45, -0.75, 0),
         pedHeading = 254,
-        explosionXModifier = -0.75,
-        explosionYModifier = 0.1,
+        explosionXModifier = -0.25,
+        explosionYModifier = -0.75,
+        blowUp = true,
         debug = false,
     },
     [5] = {
@@ -192,8 +204,9 @@ Config.DoorLocations = {
         cage = 3,
         targetModifier = vec3(-0.10, -0.75, 0),
         pedHeading = 72,
-        explosionXModifier = -0.75,
-        explosionYModifier = 0.1,
+        explosionXModifier = -0.3,
+        explosionYModifier = -1,
+        blowUp = true,
         debug = false,
     },
     [6] = {
@@ -203,8 +216,9 @@ Config.DoorLocations = {
         cage = 3,
         targetModifier = vec3(0.75, -0.10, 0),
         pedHeading = 162,
-        explosionXModifier = -0.75,
-        explosionYModifier = 0.1,
+        explosionXModifier = 0.75,
+        explosionYModifier = -0.25,
+        blowUp = true,
         debug = false,
     },
     [7] = {
@@ -214,8 +228,9 @@ Config.DoorLocations = {
         cage = 4,
         targetModifier = vec3(-0.35, -0.75, 0),
         pedHeading = 251,
-        explosionXModifier = -0.75,
-        explosionYModifier = 0.1,
+        explosionXModifier = -0.25,
+        explosionYModifier = -0.75,
+        blowUp = true,
         debug = false,
     },
     [8] = {
@@ -226,51 +241,58 @@ Config.DoorLocations = {
         targetModifier = vec3(-0.75, 0.25, 0),
         pedHeading = 170,
         explosionXModifier = -0.75,
-        explosionYModifier = 0.1,
+        explosionYModifier = 0.25,
+        blowUp = true,
         debug = false,
     },
     [9] = {
         coords = vec4(-1.6562347412109, -662.13287353516, 16.358602523804, -20),
         modelHash = -1011692606,
         size = vec3(1.5, 0.25, 2),
-        cage = 4,
+        cage = 5,
         targetModifier = vec3(0.75, -0.25, 0),
         pedHeading = 340,
-        explosionXModifier = -0.75,
-        explosionYModifier = 0.1,
+        explosionXModifier = 0.75,
+        explosionYModifier = -0.25,
+        blowUp = true,
         debug = false,
     },
     [10] = {
         coords = vec4(3.0220165252686, -660.12512207031, 16.358602523804, -110),
         modelHash = -1011692606,
         size = vec3(1.5, 0.25, 2),
-        cage = 4,
+        cage = 5,
         targetModifier = vec3(-0.10, -0.75, 0),
         pedHeading = 75,
-        explosionXModifier = -0.75,
-        explosionYModifier = 0.1,
+        explosionXModifier = -0.25,
+        explosionYModifier = -0.75,
+        specialDoor = true,
+        blowUp = true,
         debug = false,
     },
     [11] = {
         coords = vec4(7.7549180984497, -663.47186279297, 16.358602523804, -110),
         modelHash = -1011692606,
         size = vec3(1.5, 0.25, 2),
-        cage = 4,
+        cage = 6,
         targetModifier = vec3(0.10, 0.75, 0),
         pedHeading = 260,
-        explosionXModifier = -0.75,
-        explosionYModifier = 0.1,
+        explosionXModifier = 0.25,
+        explosionYModifier = 0.75,
+        specialDoor = true,
+        blowUp = true,
         debug = false,
     },
     [12] = {
         coords = vec4(10.572834014893, -666.58392333984, 16.358604431152, 160),
         modelHash = -1011692606,
         size = vec3(1.5, 0.25, 2),
-        cage = 4,
+        cage = 6,
         targetModifier = vec3(-0.75, 0.10, 0),
         pedHeading = 350,
         explosionXModifier = -0.75,
-        explosionYModifier = 0.1,
+        explosionYModifier = 0.25,
+        blowUp = true,
         debug = false,
     }
 }
@@ -282,28 +304,16 @@ Config.EmptyModels = {
 
 Config.LootRewards = {
     ["prop_large_gold"] = {
-        {
-            item = "gold_bar",
-            amount = {min = 5, max = 7},
-        }
+        {item = "goldbar", min = 1, max = 3, chance = 100}
     },
     ["prop_large_gold_alt_a"] = {
-        {
-            item = "gold_bar",
-            amount = {min = 3, max = 5},
-        }
+        {item = "goldbar", min = 1, max = 3, chance = 100}
     },
     ["prop_large_gold_alt_c"] = {
-        {
-            item = "gold_bar",
-            amount = {min = 1, max = 3},
-        }
+        {item = "goldbar", min = 1, max = 3, chance = 100}
     },
     ["prop_cash_trolly"] = {
-        {
-            item = "cash",
-            amount = {min = 1000, max = 3000},
-        }
+        {item = "money", min = 10000, max = 15000, chance = 100}
     }
 }
 
@@ -559,15 +569,6 @@ Config.Loot = {
         }
     },
     [26] = {
-        coords = vec4(2.4948759078979, -659.18127441406, 15.141, 69.152),
-        size = vec3(1.05, 0.8, 2.1),
-        cage = 5,
-        models = {
-            {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
-            {model = 'prop_gold_trolly', chance = 40},
-        }
-    },
-    [27] = {
         coords = vec4(1.4895259141922, -661.88885498047, 15.141, 69.152),
         size = vec3(1.05, 0.8, 2.1),
         cage = 5,
@@ -578,7 +579,7 @@ Config.Loot = {
     },
 
     -- Cage 6
-    [28] = {
+    [27] = {
         coords = vec4(10.139169692993, -660.56341552734, 15.141, -19.120),
         size = vec3(1.65, 1.2, 3),
         cage = 6,
@@ -589,7 +590,7 @@ Config.Loot = {
             {model = 'prop_large_gold_empty', chance = 0}
         }
     },
-    [29] = {
+    [28] = {
         coords = vec4(13.065095901489, -661.58673095703, 15.141, -19.120),
         size = vec3(1.65, 1.2, 3),
         cage = 6,
@@ -600,7 +601,7 @@ Config.Loot = {
             {model = 'prop_large_gold_empty', chance = 0}
         }
     },
-    [30] = {
+    [29] = {
         coords = vec4(13.403031349182, -663.33306884766, 15.141, 70.016),
         size = vec3(1.65, 1.2, 3),
         cage = 6,
@@ -611,7 +612,7 @@ Config.Loot = {
             {model = 'prop_large_gold_empty', chance = 0}
         }
     },
-    [31] = {
+    [30] = {
         coords = vec4(12.375401496887, -665.96148681641, 15.141, 70.016),
         size = vec3(1.65, 1.2, 3),
         cage = 6,
@@ -622,7 +623,7 @@ Config.Loot = {
             {model = 'prop_large_gold_empty', chance = 0}
         }
     },
-    [32] = {
+    [31] = {
         coords = vec4(8.3754529953003, -664.27593994141, 15.141, 69.040),
         size = vec3(1.05, 0.8, 2.1),
         cage = 6,
@@ -908,18 +909,22 @@ Config.DeleteProps = {
 Config.CreatedProps = {
     [1] = {
         coords = vec4(2.759575843811, -660.84271240234, 15.135160827637, -20),
+        cageDoor = 10,
         modelHash = 1450792563,
     },
     [2] = {
         coords = vec4(3.0220165252686, -660.12512207031, 15.135160827637, -20),
+        cageDoor = 10,
         modelHash = -275220570,
     },
     [3] = {
         coords = vec4(8.0159044265747, -662.75482177734, 15.135160827637, -20),
+        cageDoor = 11,
         modelHash = 1450792563,
     },
     [4] = {
         coords = vec4(8.2881555557251, -662.03924560547, 15.135160827637, -20),
+        cageDoor = 11,
         modelHash = -275220570,
     },
 }
