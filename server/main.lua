@@ -32,36 +32,49 @@ function CreateLootBasedOnChance()
 end
 
 RegisterNetEvent('cb-unionheist:server:BlowVaultDoor', function()
-    -- TODO: Distance Check
-    vaultBlown = true
-    TriggerClientEvent('cb-unionheist:client:BlowVaultDoor', -1)
+    local allSecurityHacked = true
+    for k, v in pairs(Config.HackLocations) do
+        if securityHacked[k] == nil then
+            allSecurityHacked = false
+            break
+        end
+    end
+    if allSecurityHacked then
+        vaultBlown = true
+        TriggerClientEvent('cb-unionheist:client:BlowVaultDoor', -1)
+    end
 end)
 
-lib.callback.register('cb-unionheist:server:RobGuard', function(source, guard)
-    -- TODO: Distance Check
-    if robbedGuards[guard] == nil then
-        robbedGuards[guard] = true
+lib.callback.register('cb-unionheist:server:IsGuardRobbed', function(source, guard)
+    if vaultBlown then
+        if robbedGuards[guard] == nil then
+            return true
+        else
+            return false
+        end
+    end
+end)
 
-        -- Process rewards
-        local guardConfig = Config.Guards[guard]
-        if guardConfig and guardConfig.rewards then
-            for _, reward in ipairs(guardConfig.rewards) do
-                local randomChance = math.random(1, 100) -- Random number between 1 and 100
-                if randomChance <= reward.chance then
-                    local amount = math.random(reward.minAmount, reward.maxAmount)
-                    if not AddItem(source, reward.item, amount) then
-                        print(string.format("Error adding %.0fx %s to Player %.0f", reward.item, amount, source))
-                    end
+RegisterNetEvent('cb-unionheist:server:RobGuard', function(guard)
+    local guardConfig = Config.Guards[guard]
+    if guardConfig and guardConfig.rewards then
+        for _, reward in ipairs(guardConfig.rewards) do
+            local randomChance = math.random(1, 100) -- Random number between 1 and 100
+            if randomChance <= reward.chance then
+                local amount = math.random(reward.minAmount, reward.maxAmount)
+                if not AddItem(source, reward.item, amount) then
+                    print(string.format("Error adding %.0fx %s to Player %.0f", reward.item, amount, source))
+                else
+                    robbedGuards[guard] = true
                 end
             end
         end
-
-        return true
-    else
-        return false
     end
 end)
+
 RegisterNetEvent('cb-unionheist:server:LootStolen', function(key)
+    print(key)
+    print(vaultBlown)
     local src = source
     local rewardConfig
     local newModel
@@ -107,11 +120,10 @@ RegisterNetEvent('cb-unionheist:server:LootStolen', function(key)
 end)
 
 RegisterNetEvent('cb-unionheist:server:BlowCageDoor', function(cage)
-    -- TODO: Distance Check
-    blownCageDoors[cage] = true
     for k, v in pairs(Config.DoorLocations) do
         local convertedCageGroup = Config.DoorLocations[cage].cage
         if convertedCageGroup == v.cage then
+            blownCageDoors[cage] = true
             blownCageGroup[v.cage] = true
             TriggerClientEvent('cb-unionheist:client:BlowCageDoor', -1, cage)
             break
@@ -121,10 +133,15 @@ end)
 
 RegisterNetEvent('cb-unionheist:server:SecurityHack', function(hack)
     securityHacked[hack] = true
+    TriggerClientEvent('cb-unionheist:client:SecurityHacked', -1, hack)
 end)
 
 lib.callback.register('cb-unionheist:server:IsVaultBlown', function(source)
     return vaultBlown
+end)
+
+lib.callback.register('cb-unionheist:server:GetSecurityHacks', function(source)
+    return securityHacked
 end)
 
 lib.callback.register('cb-unionheist:server:IsCageRoomBlown', function(source, cage)
@@ -154,5 +171,3 @@ lib.callback.register('cb-unionheist:server:GetLoot', function(source)
 end)
 
 CreateLootBasedOnChance()
-
---TODO: Make sure to drop the player from the heist if they log out

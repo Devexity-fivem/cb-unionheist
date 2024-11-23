@@ -11,12 +11,12 @@ CreateThread(function()
     end
 end)
 
-function SpecialLootMinigame()
+function VaultMinigame()
     local success = lib.skillCheck({'easy', 'easy', 'easy'}, {'w', 'a', 's', 'd'})
     return success
 end
 
-function LootHackMinigame()
+function SecurityHackMinigame()
     local success = lib.skillCheck({'easy', 'easy', 'easy'}, {'w', 'a', 's', 'd'})
     return success
 end
