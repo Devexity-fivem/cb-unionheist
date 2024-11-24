@@ -421,8 +421,8 @@ function CreateLoot()
                                     icon = "fa-solid fa-box-open",
                                     label = 'Loot',
                                     onSelect = function()
-                                        local cageBlown = lib.callback.await('cb-unionheist:server:IsCageRoomBlown', false, lootConfig.cage)
-                                        if cageBlown then
+                                        local allowed = lib.callback.await('cb-unionheist:server:IsAllowedToStealLoot', false, lootConfig.cage, key)
+                                        if allowed then
                                             StealLoot(key, modelHash, lootConfig.coords)
                                         end
                                     end,
@@ -616,15 +616,3 @@ function ExitHeist()
     DestroyCageDoors()
     DestroyLoot()
 end
-
-RegisterCommand("enterHeist", function()
-    EnterHeist()
-end, false)
-
-RegisterCommand("exitHeist", function()
-    ExitHeist()
-end, false)
-
-RegisterCommand("blowvault", function()
-    TriggerServerEvent('cb-unionheist:server:BlowVaultDoor2')
-end, false)

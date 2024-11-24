@@ -38,6 +38,7 @@ function ResetHeistLoop()
     vaultBlown = false
     blownCageDoors = {}
     lootResults = {}
+    lootStolen = {}
     securityHacked = {}
     robbedGuards = {}
     TriggerClientEvent('cb-unionheist:client:ResetHeist', -1)
@@ -131,18 +132,20 @@ RegisterNetEvent('cb-unionheist:server:LootStolen', function(key)
                     for _, reward in pairs(rewardConfig) do
                         if math.random(100) <= reward.chance then
                             local rewardAmount = math.random(reward.min, reward.max)
-                            if not AddItem(src, reward.item, rewardAmount) and (lootStolen[key] == nil) then
-                                return
-                            else
-                                lootStolen[key] = true
-                                TriggerClientEvent('cb-unionheist:client:SyncLoot', -1, k, lootResults[k].model)
-                                for _, modelData in pairs(Config.Loot[k].models) do
-                                    if modelData.model == lootResults[k].model then
-                                        newModel = modelData.newModel
+                            if lootStolen[key] == nil then
+                                if not AddItem(src, reward.item, rewardAmount) then
+                                    return
+                                else
+                                    lootStolen[key] = true
+                                    TriggerClientEvent('cb-unionheist:client:SyncLoot', -1, k, lootResults[k].model)
+                                    for _, modelData in pairs(Config.Loot[k].models) do
+                                        if modelData.model == lootResults[k].model then
+                                            newModel = modelData.newModel
+                                        end
                                     end
-                                end
 
-                                lootResults[k].model = newModel
+                                    lootResults[k].model = newModel
+                                end
                             end
                         end
                     end
@@ -227,14 +230,14 @@ lib.callback.register('cb-unionheist:server:IsSecurityHacked', function(source)
     return true
 end)
 
-lib.callback.register('cb-unionheist:server:IsCageRoomBlown', function(source, cage)
+lib.callback.register('cb-unionheist:server:IsAllowedToStealLoot', function(source, cage, loot)
     for k, v in pairs(Config.DoorLocations) do
         if cage == v.cage then
             cageRoomBlown[v.cage] = true
             break
         end
     end
-    return cageRoomBlown[cage] or false
+    return (cageRoomBlown[cage] or false) and (lootStolen[loot] == nil)
 end)
 
 lib.callback.register('cb-unionheist:server:IsCageBlown', function(source, cage)
@@ -250,10 +253,3 @@ lib.callback.register('cb-unionheist:server:GetLoot', function(source)
 end)
 
 CreateLootBasedOnChance()
-
--- TOOD: Make sure all of the code works without this function
-
-RegisterNetEvent('cb-unionheist:server:BlowVaultDoor2', function()
-    vaultBlown = true
-    TriggerClientEvent('cb-unionheist:client:BlowVaultDoor', -1)
-end)
