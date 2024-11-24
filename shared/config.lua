@@ -11,12 +11,12 @@ Config.Guards = {
         health = 300,
         armor = 100,
         combatMovement = 2, -- {0 = Stationary | 1 = Defensive | 2 = Offensive | 3 = Suicidal Offensive}
+        rewardsToGive = {min = 1, max = 2},
         rewards = {
             [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
             [2] = {item = "ammo-rifle2", minAmount = 1, maxAmount = 1, chance = 20},
         }
     },
-    --[[
     [2] = {
         coords = vec4(-8.18, -680.37, 16.13, 253.6),
         model = "s_m_m_security_01",
@@ -25,6 +25,7 @@ Config.Guards = {
         health = 300,
         armor = 100,
         combatMovement = 2,
+        rewardsToGive = {min = 1, max = 2},
         rewards = {
             [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
             [2] = {item = "ammo-rifle2", minAmount = 1, maxAmount = 1, chance = 20},
@@ -38,6 +39,7 @@ Config.Guards = {
         health = 300,
         armor = 100,
         combatMovement = 2,
+        rewardsToGive = {min = 1, max = 2},
         rewards = {
             [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
             [2] = {item = "ammo-rifle2", minAmount = 1, maxAmount = 1, chance = 20},
@@ -51,6 +53,7 @@ Config.Guards = {
         health = 300,
         armor = 100,
         combatMovement = 2,
+        rewardsToGive = {min = 1, max = 2},
         rewards = {
             [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
             [2] = {item = "ammo-rifle2", minAmount = 1, maxAmount = 1, chance = 20},
@@ -64,6 +67,7 @@ Config.Guards = {
         health = 300,
         armor = 100,
         combatMovement = 2,
+        rewardsToGive = {min = 1, max = 2},
         rewards = {
             [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
             [2] = {item = "ammo-rifle2", minAmount = 1, maxAmount = 1, chance = 20},
@@ -77,18 +81,18 @@ Config.Guards = {
         health = 300,
         armor = 100,
         combatMovement = 2,
+        rewardsToGive = {min = 1, max = 2},
         rewards = {
             [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
             [2] = {item = "ammo-rifle2", minAmount = 1, maxAmount = 1, chance = 20},
         }
     }
-    ]]
 }
 
 Config.Vault = {
     coords = vec4(-1.7279472351074, -686.54174804688, 16.689130783081, 160.071),
     size = vec3(3, 1, 2),
-    required = {item = "thermite", amount = 1},
+    required = {item = "bomb", amount = 1},
     debug = false,
 }
 
@@ -109,9 +113,8 @@ Config.HackLocations = {
         required = {item = "electronickit", amount = 1},
         animModifier = vec3(0, 0, -0.4),
         pedHeading = 80,
-        debug = true,
+        debug = false,
     },
-    --[[
     [2] = {
         coords = vec4(-5.40, -700.61, 16.5, 161.25),
         size = vec3(1, 0.5, 2),
@@ -140,7 +143,6 @@ Config.HackLocations = {
         pedHeading = 80,
         debug = false,
     }
-    ]]
 }
 
 Config.DoorLocations = {
@@ -333,7 +335,7 @@ Config.Loot = {
         coords = vec4(-8.630, -676.709, 15.141, 160.327),
         size = vec3(1.65, 1.2, 3),
         cage = 1,
-        duration = 15000,
+        duration = 1000,
         models = {
             -- THE CHANCES MUST ADD UP TO 100 EXACTLY. NOT MORE, NOT LESS. YOU WILL BREAK SHIT
             {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33}, -- 50% chance to spawn
@@ -346,7 +348,7 @@ Config.Loot = {
         coords = vec4(-7.643, -673.846, 15.141, 160.327),
         size = vec3(1.65, 1.2, 3),
         cage = 1,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
             {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
@@ -358,7 +360,7 @@ Config.Loot = {
         coords = vec4(-3.629, -675.651, 15.141, 72.616),
         size = vec3(1.05, 0.8, 2.1),
         cage = 1,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -368,7 +370,7 @@ Config.Loot = {
         coords = vec4(-4.557, -678.313, 15.141, 72.616),
         size = vec3(1.05, 0.8, 2.1),
         cage = 1,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -380,7 +382,7 @@ Config.Loot = {
         coords = vec4(2.35933494567871, -680.9426879882812, 15.141, -110.425),
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -390,7 +392,7 @@ Config.Loot = {
         coords = vec4(3.26235651969909, -678.2145385742188, 15.141, 70.643),
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -400,7 +402,7 @@ Config.Loot = {
         coords = vec4(6.4910802841187, -682.59210205078, 15.141, 70.254),
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -410,7 +412,7 @@ Config.Loot = {
         coords = vec4(7.1166009902954, -681.14898681641, 15.141, 70.103),
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -420,7 +422,7 @@ Config.Loot = {
         coords = vec4(7.5191202163696, -679.728515625, 15.141, 71.060),
         size = vec3(1.05, 0.8, 2.1),
         cage = 2,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -433,7 +435,7 @@ Config.Loot = {
         coords = vec4(-5.936728477478, -672.54266357422, 15.141, -20.740),
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -443,7 +445,7 @@ Config.Loot = {
         coords = vec4(-6.7941837310791, -671.40014648438, 15.141, 69.834),
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -453,7 +455,7 @@ Config.Loot = {
         coords = vec4(-6.2704219818115, -670.04833984375, 15.141, 69.834),
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -463,7 +465,7 @@ Config.Loot = {
         coords = vec4(-5.7556109428406, -668.58551025391, 15.141, 69.834),
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -473,7 +475,7 @@ Config.Loot = {
         coords = vec4(-4.347936630249, -668.61016845703, 15.141, -19.731),
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -483,7 +485,7 @@ Config.Loot = {
         coords = vec4(-1.538468003273, -670.19311523438, 15.141, 68.618),
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -493,7 +495,7 @@ Config.Loot = {
         coords = vec4(-2.5635013580322, -672.90319824219, 15.141, 68.618),
         size = vec3(1.05, 0.8, 2.1),
         cage = 3,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -505,7 +507,7 @@ Config.Loot = {
         coords = vec4(8.6649103164673, -673.21044921875, 15.141, -19.786),
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -515,7 +517,7 @@ Config.Loot = {
         coords = vec4(9.4819917678833, -674.20440673828, 15.141, 69.461),
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -525,7 +527,7 @@ Config.Loot = {
         coords = vec4(8.5653009414673, -676.89196777344, 15.141, 69.461),
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -535,7 +537,7 @@ Config.Loot = {
         coords = vec4(7.1033549308777, -677.41119384766, 15.141, -19.741),
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -545,7 +547,7 @@ Config.Loot = {
         coords = vec4(4.3525218963623, -675.32373046875, 15.141, 70.329),
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -556,7 +558,7 @@ Config.Loot = {
         coords = vec4(5.3795747756958, -672.59796142578, 15.141, 70.329),
         size = vec3(1.05, 0.8, 2.1),
         cage = 4,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -568,7 +570,7 @@ Config.Loot = {
         coords = vec4(-2.2559998035431, -660.330078125, 15.141, 71.264),
         size = vec3(1.65, 1.2, 3),
         cage = 5,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
             {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
@@ -580,7 +582,7 @@ Config.Loot = {
         coords = vec4(-1.5695213079453, -658.06890869141, 15.141, 71.264),
         size = vec3(1.65, 1.2, 3),
         cage = 5,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
             {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
@@ -592,7 +594,7 @@ Config.Loot = {
         coords = vec4(0.99421143531799, -657.27581787109, 15.141, -18.817),
         size = vec3(1.65, 1.2, 3),
         cage = 5,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
             {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
@@ -604,7 +606,7 @@ Config.Loot = {
         coords = vec4(1.4895259141922, -661.88885498047, 15.141, 69.152),
         size = vec3(1.05, 0.8, 2.1),
         cage = 5,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},
@@ -616,7 +618,7 @@ Config.Loot = {
         coords = vec4(10.139169692993, -660.56341552734, 15.141, -19.120),
         size = vec3(1.65, 1.2, 3),
         cage = 6,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
             {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
@@ -628,7 +630,7 @@ Config.Loot = {
         coords = vec4(13.065095901489, -661.58673095703, 15.141, -19.120),
         size = vec3(1.65, 1.2, 3),
         cage = 6,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
             {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
@@ -640,7 +642,7 @@ Config.Loot = {
         coords = vec4(13.403031349182, -663.33306884766, 15.141, 70.016),
         size = vec3(1.65, 1.2, 3),
         cage = 6,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
             {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
@@ -652,7 +654,7 @@ Config.Loot = {
         coords = vec4(12.375401496887, -665.96148681641, 15.141, 70.016),
         size = vec3(1.65, 1.2, 3),
         cage = 6,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_large_gold', newModel = 'prop_large_gold_empty', chance = 33},
             {model = 'prop_large_gold_alt_a', newModel = 'prop_large_gold_empty', chance = 33},
@@ -664,7 +666,7 @@ Config.Loot = {
         coords = vec4(8.3754529953003, -664.27593994141, 15.141, 69.040),
         size = vec3(1.05, 0.8, 2.1),
         cage = 6,
-        duration = 15000,
+        duration = 1000,
         models = {
             {model = 'prop_cash_trolly', newModel = "prop_gold_trolly", chance = 60},
             {model = 'prop_gold_trolly', chance = 40},

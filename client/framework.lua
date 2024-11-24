@@ -11,6 +11,10 @@ CreateThread(function()
     end
 end)
 
+function NotifyCops()
+    -- ADD YOUR POLICE ALERT HERE
+end
+
 function VaultMinigame()
     local success = lib.skillCheck({'easy', 'easy', 'easy'}, {'w', 'a', 's', 'd'})
     return success

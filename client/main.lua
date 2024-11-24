@@ -1,8 +1,10 @@
 local createdLoot = {}
 local robbedLoot = {}
+local robbedGuards = {}
 local CreatedObjectHandles = {}
 local cageDoorBlown = {}
 local doingSomething = false
+local vaultBlown = false
 
 function DeleteNativeProps()
     for k, v in pairs(Config.DeleteProps) do
@@ -49,12 +51,10 @@ function SpawnMissionPeds()
             icon = "fa-solid fa-mask",
             distance = 1.5,
             canInteract = function(entity, distance, coords, name, bone)
-                return IsEntityDead(entity)
+                return IsEntityDead(entity) and (robbedGuards[k] == nil)
             end,
             onSelect = function()
-                print("this")
                 local robbed = lib.callback.await('cb-unionheist:server:IsGuardRobbed', false, k)
-                print(robbed)
                 if robbed then
                     Notify("Already Robbed", "This guard has already been robbed!", "error")
                 else
@@ -88,11 +88,10 @@ function RobCopAnim(targetPed, guard)
     local playerCoords = GetEntityCoords(playerPed)
     local playerRot = GetEntityRotation(playerPed)
     local targetCoords = GetEntityCoords(targetPed)
-    local sceneOffset = vector3(0.0, 0.0, -0.5)
+    local sceneOffset = vector3(0.0, 0.0, -0.6)
     local searchScene = NetworkCreateSynchronisedScene(targetCoords.x, targetCoords.y, targetCoords.z + sceneOffset.z, playerRot.x, playerRot.y, playerRot.z, 2, true, false, 1.0, 0, 1.3)
     NetworkAddPedToSynchronisedScene(playerPed, searchScene, animDict, "player_search", 1.5, -4.0, 1, 16, 1148846080, 0)
     NetworkStartSynchronisedScene(searchScene)
-    Wait(5000)
     doingSomething = false
     TriggerServerEvent('cb-unionheist:server:RobGuard', guard)
     ClearPedTasks(playerPed)
@@ -104,39 +103,60 @@ end
 function BlowVaultDoor()
     if LocalPlayer.state.UnionHeist and not doingSomething then
         doingSomething = true
-        local vaultCoords = Config.Vault.coords
-        RequestAnimDict("anim@heists@ornate_bank@thermal_charge")
-        RequestModel("hei_p_m_bag_var22_arm_s")
-        RequestNamedPtfxAsset("scr_ornate_heist")
-        while not HasAnimDictLoaded("anim@heists@ornate_bank@thermal_charge") and not HasModelLoaded("hei_p_m_bag_var22_arm_s") and not HasNamedPtfxAssetLoaded("scr_ornate_heist") do
-            Wait(50)
+        local removedItem = lib.callback.await('cb-unionheist:server:RemoveVaultItem', false)
+        if removedItem then
+            local ped = PlayerPedId()
+            local vaultCoords = Config.Vault.coords
+            SetEntityHeading(ped, 120)
+            RequestAnimDict("anim@scripted@charlie_missions@mission_5@ig1_avi_hacking@")
+            while not HasAnimDictLoaded("anim@scripted@charlie_missions@mission_5@ig1_avi_hacking@") do
+                Wait(50)
+            end
+            local rotx, roty, rotz = table.unpack(vec3(GetEntityRotation(ped)))
+            local hackscene = NetworkCreateSynchronisedScene(vaultCoords.x-1.75, vaultCoords.y, vaultCoords.z-0.5, rotx, roty, rotz, 2, false, false, 1065353216, 0, 1.3)
+            NetworkAddPedToSynchronisedScene(ped, hackscene, "anim@scripted@charlie_missions@mission_5@ig1_avi_hacking@", "hack", 1.2, -4.0, 1, 16, 1148846080, 0)
+            NetworkStartSynchronisedScene(hackscene)
+            local success = VaultMinigame()
+            if success then
+                NetworkStopSynchronisedScene(hackscene)
+                RequestAnimDict("anim@heists@ornate_bank@thermal_charge")
+                RequestModel("hei_p_m_bag_var22_arm_s")
+                RequestNamedPtfxAsset("scr_ornate_heist")
+                while not HasAnimDictLoaded("anim@heists@ornate_bank@thermal_charge") and not HasModelLoaded("hei_p_m_bag_var22_arm_s") and not HasNamedPtfxAssetLoaded("scr_ornate_heist") do
+                    Wait(50)
+                end
+                Wait(100)
+                SetEntityHeading(ped, 297)
+                rotx, roty, rotz = table.unpack(vec3(GetEntityRotation(PlayerPedId())))
+                local bagscene = NetworkCreateSynchronisedScene(vaultCoords.x-1.75, vaultCoords.y, vaultCoords.z-0.5, rotx, roty, rotz, 2, false, false, 1065353216, 0, 1.3)
+                local bag = CreateObject(GetHashKey("hei_p_m_bag_var22_arm_s"), vaultCoords.x-1.75, vaultCoords.y, vaultCoords.z-0.5, true, true, false)
+                NetworkAddPedToSynchronisedScene(ped, bagscene, "anim@heists@ornate_bank@thermal_charge", "thermal_charge", 1.2, -4.0, 1, 16, 1148846080, 0)
+                NetworkAddEntityToSynchronisedScene(bag, bagscene, "anim@heists@ornate_bank@thermal_charge", "bag_thermal_charge", 4.0, -8.0, 1)
+                SetPedComponentVariation(ped, 5, 0, 0, 0)
+                NetworkStartSynchronisedScene(bagscene)
+                Wait(3500)
+                DeleteObject(bag)
+                SetPedComponentVariation(ped, 5, 45, 0, 0)
+                NetworkStopSynchronisedScene(bagscene)
+                AddExplosion(vaultCoords.x-1.75, vaultCoords.y+0.8, vaultCoords.z, 22, 0.8, true, false, 1)
+                TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro", 8.0, 8.0, 1000, 36, 1, false, false, false)
+                TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_loop", 8.0, 8.0, 3000, 49, 1, false, false, false)
+                -- Add Evidence
+                Wait(52000)
+                AddExplosion(vaultCoords.x-1.75, vaultCoords.y, vaultCoords.z, 2, 0.8, true, false, 1)
+                TriggerServerEvent('cb-unionheist:server:BlowVaultDoor')
+                NotifyCops()
+                SpawnMissionPeds()
+                doingSomething = false
+            else
+                doingSomething = false
+                NetworkStopSynchronisedScene(hackscene)
+                return
+            end
+            ClearPedTasks(ped)
+        else
+            Notify("Missing Item", "You are missing the required item", "error")
         end
-        local ped = PlayerPedId()
-        SetEntityHeading(ped, 297)
-        Wait(100)
-
-        local rotx, roty, rotz = table.unpack(vec3(GetEntityRotation(PlayerPedId())))
-        local bagscene = NetworkCreateSynchronisedScene(vaultCoords.x-1.75, vaultCoords.y, vaultCoords.z-0.5, rotx, roty, rotz, 2, false, false, 1065353216, 0, 1.3)
-        local bag = CreateObject(GetHashKey("hei_p_m_bag_var22_arm_s"), vaultCoords.x-1.75, vaultCoords.y, vaultCoords.z-0.5, true, true, false)
-        NetworkAddPedToSynchronisedScene(ped, bagscene, "anim@heists@ornate_bank@thermal_charge", "thermal_charge", 1.2, -4.0, 1, 16, 1148846080, 0)
-        NetworkAddEntityToSynchronisedScene(bag, bagscene, "anim@heists@ornate_bank@thermal_charge", "bag_thermal_charge", 4.0, -8.0, 1)
-        SetPedComponentVariation(ped, 5, 0, 0, 0)
-        NetworkStartSynchronisedScene(bagscene)
-        Wait(3500)
-        DeleteObject(bag)
-        SetPedComponentVariation(ped, 5, 45, 0, 0)
-        NetworkStopSynchronisedScene(bagscene)
-        AddExplosion(vaultCoords.x-1.75, vaultCoords.y+0.8, vaultCoords.z, 22, 0.8, true, false, 1)
-        TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro", 8.0, 8.0, 1000, 36, 1, false, false, false)
-        TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_loop", 8.0, 8.0, 3000, 49, 1, false, false, false)
-        -- Add Evidence
-        Wait(52000)
-        AddExplosion(vaultCoords.x-1.75, vaultCoords.y, vaultCoords.z, 2, 0.8, true, false, 1)
-        TriggerServerEvent('cb-unionheist:server:BlowVaultDoor')
-        SpawnMissionPeds()
-        Wait(5000)
-        doingSomething = false
-        ClearPedTasks(ped)
     else
         Notify("Headaches", "You need to exit the depository and re-enter!", "error")
     end
@@ -160,10 +180,11 @@ function SecurityHackAnim(hack)
         local success = SecurityHackMinigame()
         if success then
             TriggerServerEvent('cb-unionheist:server:SecurityHack', hack)
+        else
+            TriggerServerEvent('cb-unionheist:server:FailedSecurityHack', hack)
         end
         NetworkStopSynchronisedScene(hackScene)
         -- Add Evidence
-        Wait(5000)
         doingSomething = false
         ClearPedTasks(ped)
     else
@@ -228,7 +249,7 @@ TeleportInside = lib.zones.box({
     coords = vector3(Config.TeleportIn.x, Config.TeleportIn.y, Config.TeleportIn.z), -- The center of the zone
     size = vec3(2, 1, 1),
     rotation = Config.TeleportIn.w, -- Rotation of the zone
-    debug = true, -- Debug mode, set to true to visualize the zone
+    debug = false,
     inside = function()
         DrawText3Ds(Config.TeleportIn.x, Config.TeleportIn.y, Config.TeleportIn.z, "[E] Exit Depository")
         if IsControlJustReleased(0, 38) then -- 38 is the control for "E"
@@ -248,7 +269,7 @@ TeleportOutside = lib.zones.box({
     coords = vector3(Config.TeleportOut.x, Config.TeleportOut.y, Config.TeleportOut.z), -- The center of the zone
     size = vec3(2, 1, 1),
     rotation = Config.TeleportOut.w, -- Rotation of the zone
-    debug = true, -- Debug mode, set to true to visualize the zone
+    debug = false,
     inside = function()
         DrawText3Ds(Config.TeleportOut.x, Config.TeleportOut.y, Config.TeleportOut.z, "[E] Enter Depository")
         if IsControlJustReleased(0, 38) then -- 38 is the control for "E"
@@ -277,7 +298,7 @@ function CreateSecurityHacks()
                 options = {
                     {
                         icon = "fa-solid fa-mobile",
-                        label = 'Hack Vault Security '..k,
+                        label = 'Hack Vault Security',
                         onSelect = function()
                             SecurityHackAnim(k)
                         end,
@@ -311,16 +332,13 @@ function CreateVaultDoor()
                     onSelect = function()
                         local securityHacked = lib.callback.await('cb-unionheist:server:IsSecurityHacked', false)
                         if securityHacked then
-                            local success = VaultMinigame()
-                            if success then
-                                BlowVaultDoor()
-                            end
+                            BlowVaultDoor()
                         else
                             Notify("Vault Security", "Take out the security system first!", "error")
                         end
                     end,
                     canInteract = function()
-                        return HasItemClient(Config.Vault.required.item, Config.Vault.required.amount)
+                        return HasItemClient(Config.Vault.required.item, Config.Vault.required.amount) and not doingSomething
                     end,
                     distance = 2.5,
                 }
@@ -348,7 +366,11 @@ function CreateCageDoors()
                         icon = "fa-solid fa-explosion",
                         label = 'Blow Cage Door '..k,
                         onSelect = function()
-                            BlowCageDoor(k)
+                            if vaultBlown then
+                                BlowCageDoor(k)
+                            else
+                                Notify("Blow Vault", "Blow the Vault Door first", "error")
+                            end
                         end,
                         canInteract = function()
                             return HasItemClient(Config.DoorLocations[k].required.item, Config.DoorLocations[k].required.amount)
@@ -404,11 +426,9 @@ function CreateLoot()
                             options = {
                                 {
                                     icon = "fa-solid fa-box-open",
-                                    label = 'Loot'..key,
+                                    label = 'Loot',
                                     onSelect = function()
-                                        print(lootConfig.cage)
                                         local cageBlown = lib.callback.await('cb-unionheist:server:IsCageRoomBlown', false, lootConfig.cage)
-                                        print(cageBlown)
                                         if cageBlown then
                                             StealLoot(key, modelHash, lootConfig.coords)
                                         end
@@ -434,9 +454,24 @@ RegisterNetEvent('cb-unionheist:client:SecurityHacked', function(hack)
     end
 end)
 
+RegisterNetEvent('cb-unionheist:client:RobGuard', function(guard)
+    robbedGuards[guard] = true
+end)
+
+RegisterNetEvent('cb-unionheist:client:ResetHeist', function()
+    createdLoot = {}
+    robbedLoot = {}
+    robbedGuards = {}
+    CreatedObjectHandles = {}
+    cageDoorBlown = {}
+    doingSomething = false
+    vaultBlown = false
+    ExitHeist()
+end)
+
 RegisterNetEvent('cb-unionheist:client:BlowVaultDoor', function()
     if LocalPlayer.state.UnionHeist then
-        local vaultBlown = lib.callback.await('cb-unionheist:server:IsVaultBlown', false)
+        vaultBlown = lib.callback.await('cb-unionheist:server:IsVaultBlown', false)
         if not vaultBlown then
             return
         else
