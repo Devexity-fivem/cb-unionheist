@@ -1,6 +1,7 @@
 Config = {}
 Config.TeleportIn = vec4(5.79, -709.24, 16.13, 341.16)
 Config.TeleportOut = vec4(10.23, -667.79, 33.45, 359.0)
+Config.ResetTime = 15 -- In minutes, how long after the Vault is blown does the Heist reset
 
 Config.Guards = {
     [1] = {
@@ -17,6 +18,7 @@ Config.Guards = {
             [2] = {item = "ammo-rifle2", minAmount = 1, maxAmount = 1, chance = 20},
         }
     },
+    --[[
     [2] = {
         coords = vec4(-8.18, -680.37, 16.13, 253.6),
         model = "s_m_m_security_01",
@@ -87,6 +89,7 @@ Config.Guards = {
             [2] = {item = "ammo-rifle2", minAmount = 1, maxAmount = 1, chance = 20},
         }
     }
+    ]]
 }
 
 Config.Vault = {
@@ -101,6 +104,21 @@ Config.GasGrenades = {
     locations = {
         [1] = {
             coords = vec3(-6.18, -677.19, 15.5),
+        },
+        [2] = {
+            coords = vec3(5.11, -679.85, 15.5)
+        },
+        [3] = {
+            coords = vec3(-4.17, -670.81, 16.13)
+        },
+        [4] = {
+            coords = vec3(7.23, -675.38, 16.13)
+        },
+        [5] = {
+            coords = vec3(-0.17, -660.09, 16.13)
+        },
+        [6] = {
+            coords = vec3(11.17, -663.98, 16.13)
         }
     }
 }
@@ -115,6 +133,7 @@ Config.HackLocations = {
         pedHeading = 80,
         debug = false,
     },
+    --[[
     [2] = {
         coords = vec4(-5.40, -700.61, 16.5, 161.25),
         size = vec3(1, 0.5, 2),
@@ -143,6 +162,7 @@ Config.HackLocations = {
         pedHeading = 80,
         debug = false,
     }
+    ]]
 }
 
 Config.DoorLocations = {

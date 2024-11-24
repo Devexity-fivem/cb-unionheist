@@ -195,51 +195,54 @@ end
 function BlowCageDoor(cage)
     if LocalPlayer.state.UnionHeist and not doingSomething then
         doingSomething = true
-        local cageCoords = Config.DoorLocations[cage].coords
-        local pedHeading = Config.DoorLocations[cage].pedHeading
-        RequestAnimDict("anim@heists@ornate_bank@thermal_charge")
-        RequestModel("hei_p_m_bag_var22_arm_s")
-        RequestNamedPtfxAsset("scr_ornate_heist")
-        while not HasAnimDictLoaded("anim@heists@ornate_bank@thermal_charge") and not HasModelLoaded("hei_p_m_bag_var22_arm_s") and not HasNamedPtfxAssetLoaded("scr_ornate_heist") do
-            Wait(50)
-        end
-        local ped = PlayerPedId()
-        SetEntityHeading(ped, pedHeading)
-        Wait(100)
+        local removedItem = lib.callback.await('cb-unionheist:server:RemoveCageItem', false, cage)
+        if removedItem then
+            local cageCoords = Config.DoorLocations[cage].coords
+            local pedHeading = Config.DoorLocations[cage].pedHeading
+            RequestAnimDict("anim@heists@ornate_bank@thermal_charge")
+            RequestModel("hei_p_m_bag_var22_arm_s")
+            RequestNamedPtfxAsset("scr_ornate_heist")
+            while not HasAnimDictLoaded("anim@heists@ornate_bank@thermal_charge") and not HasModelLoaded("hei_p_m_bag_var22_arm_s") and not HasNamedPtfxAssetLoaded("scr_ornate_heist") do
+                Wait(50)
+            end
+            local ped = PlayerPedId()
+            SetEntityHeading(ped, pedHeading)
+            Wait(100)
 
-        local rotx, roty, rotz = table.unpack(vec3(GetEntityRotation(PlayerPedId())))
-        local targetModifier = Config.DoorLocations[cage].targetModifier
-        local lootscene = NetworkCreateSynchronisedScene(cageCoords.x+targetModifier.x, cageCoords.y+targetModifier.y, cageCoords.z+targetModifier.z, rotx, roty, rotz, 2, false, false, 1065353216, 0, 1.3)
+            local rotx, roty, rotz = table.unpack(vec3(GetEntityRotation(PlayerPedId())))
+            local targetModifier = Config.DoorLocations[cage].targetModifier
+            local lootscene = NetworkCreateSynchronisedScene(cageCoords.x+targetModifier.x, cageCoords.y+targetModifier.y, cageCoords.z+targetModifier.z, rotx, roty, rotz, 2, false, false, 1065353216, 0, 1.3)
 
-        NetworkAddPedToSynchronisedScene(ped, lootscene, "anim@heists@ornate_bank@thermal_charge", "thermal_charge", 1.2, -4.0, 1, 16, 1148846080, 0)
-        SetPedComponentVariation(ped, 5, 45, 0, 0)
-        NetworkStartSynchronisedScene(lootscene)
-        Wait(3500)
-        NetworkStopSynchronisedScene(lootscene)
-        local explosionYModifier = Config.DoorLocations[cage].explosionYModifier
-        local explosionXModifier = Config.DoorLocations[cage].explosionXModifier
-        TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro", 8.0, 8.0, 1000, 36, 1, false, false, false)
-        TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_loop", 8.0, 8.0, 3000, 49, 1, false, false, false)
-        -- Add Evidence
-        AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 22, 0.8, true, false, 1)
-        Wait(5000) --TODO: Change to 52000
-        if Config.GasGrenades.enabled then
-            for k, v in pairs(Config.GasGrenades.locations) do
-                local cageGroupBlown = lib.callback.await('cb-unionheist:server:IsCageRoomBlown', false, cage)
-                if not cageGroupBlown then
-                    if k == cage then
-                        local gasCoords = v.coords
-                        AddExplosion(gasCoords.x, gasCoords.y, gasCoords.z, 21, 1.5, true, false, 1)
+            NetworkAddPedToSynchronisedScene(ped, lootscene, "anim@heists@ornate_bank@thermal_charge", "thermal_charge", 1.2, -4.0, 1, 16, 1148846080, 0)
+            SetPedComponentVariation(ped, 5, 45, 0, 0)
+            NetworkStartSynchronisedScene(lootscene)
+            Wait(3500)
+            NetworkStopSynchronisedScene(lootscene)
+            local explosionYModifier = Config.DoorLocations[cage].explosionYModifier
+            local explosionXModifier = Config.DoorLocations[cage].explosionXModifier
+            TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro", 8.0, 8.0, 1000, 36, 1, false, false, false)
+            TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_loop", 8.0, 8.0, 3000, 49, 1, false, false, false)
+            -- Add Evidence
+            AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 22, 0.8, true, false, 1)
+            Wait(52000)
+            if Config.GasGrenades.enabled then
+                for k, v in pairs(Config.GasGrenades.locations) do
+                    local cageGroupBlown = lib.callback.await('cb-unionheist:server:IsCageRoomBlown', false, cage)
+                    if not cageGroupBlown then
+                        if k == cage then
+                            local gasCoords = v.coords
+                            AddExplosion(gasCoords.x, gasCoords.y, gasCoords.z, 21, 1.5, true, false, 1)
+                        end
                     end
                 end
             end
+            TriggerServerEvent('cb-unionheist:server:BlowCageDoor', cage)
+            if Config.DoorLocations[cage].blowUp then
+                AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 43, 0.8, true, false, 1)
+            end
+            doingSomething = false
+            ClearPedTasks(ped)
         end
-        TriggerServerEvent('cb-unionheist:server:BlowCageDoor', cage)
-        if Config.DoorLocations[cage].blowUp then
-            AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 43, 0.8, true, false, 1)
-        end
-        doingSomething = false
-        ClearPedTasks(ped)
     else
         Notify("Headaches", "You need to exit the depository and re-enter!", "error")
     end
@@ -633,12 +636,4 @@ end, false)
 
 RegisterCommand("exitHeist", function()
     ExitHeist()
-end, false)
-
-RegisterCommand("blowvault", function()
-    TriggerServerEvent('cb-unionheist:server:BlowVaultDoor')
-end, false)
-
-RegisterCommand("blowDoor", function()
-    TriggerServerEvent('cb-unionheist:server:BlowCageDoor', 10)
 end, false)

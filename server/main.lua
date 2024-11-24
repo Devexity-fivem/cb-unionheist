@@ -32,7 +32,7 @@ function CreateLootBasedOnChance()
 end
 
 function ResetHeistLoop()
-    local minutes = 0.25
+    local minutes = Config.ResetTime
     Wait(1000 * 60 * minutes)
     vaultBlown = false
     blownCageDoors = {}
@@ -155,18 +155,13 @@ RegisterNetEvent('cb-unionheist:server:LootStolen', function(key)
 end)
 
 RegisterNetEvent('cb-unionheist:server:BlowCageDoor', function(cage)
-    local doorConfig = Config.DoorLocations[cage]
-    if HasItem(source, doorConfig.required.item, doorConfig.required.amount) then
-        for k, v in pairs(Config.DoorLocations) do
-            local convertedCageGroup = Config.DoorLocations[cage].cage
-            if convertedCageGroup == v.cage then
-                if RemoveItem(source, doorConfig.required.item, doorConfig.required.amount) then
-                    blownCageDoors[cage] = true
-                    blownCageGroup[v.cage] = true
-                    TriggerClientEvent('cb-unionheist:client:BlowCageDoor', -1, cage)
-                    break
-                end
-            end
+    for k, v in pairs(Config.DoorLocations) do
+        local convertedCageGroup = Config.DoorLocations[cage].cage
+        if convertedCageGroup == v.cage then
+            blownCageDoors[cage] = true
+            blownCageGroup[v.cage] = true
+            TriggerClientEvent('cb-unionheist:client:BlowCageDoor', -1, cage)
+            break
         end
     end
 end)
@@ -200,6 +195,20 @@ lib.callback.register('cb-unionheist:server:RemoveVaultItem', function(source)
             else
                 return true
             end
+        end
+    else
+        return false
+    end
+end)
+
+lib.callback.register('cb-unionheist:server:RemoveCageItem', function(source, cage)
+    local cageConfig = Config.DoorLocations[cage]
+    if HasItem(source, cageConfig.required.item, cageConfig.required.amount) then
+        if not RemoveItem(source, cageConfig.required.item, cageConfig.required.amount) then
+            print(string.format("Error removing %.0fx %s from Player %.0f inventory", cageConfig.required.amount, cageConfig.required.item, source))
+            return false
+        else
+            return true
         end
     else
         return false
