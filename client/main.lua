@@ -220,28 +220,18 @@ function BlowCageDoor(cage)
             NetworkStopSynchronisedScene(lootscene)
             local explosionYModifier = Config.DoorLocations[cage].explosionYModifier
             local explosionXModifier = Config.DoorLocations[cage].explosionXModifier
+            AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 22, 0.8, true, false, 1)
             TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro", 8.0, 8.0, 1000, 36, 1, false, false, false)
             TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_loop", 8.0, 8.0, 3000, 49, 1, false, false, false)
             -- Add Evidence
-            AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 22, 0.8, true, false, 1)
-            Wait(52000)
-            if Config.GasGrenades.enabled then
-                for k, v in pairs(Config.GasGrenades.locations) do
-                    local cageGroupBlown = lib.callback.await('cb-unionheist:server:IsCageRoomBlown', false, cage)
-                    if not cageGroupBlown then
-                        if k == cage then
-                            local gasCoords = v.coords
-                            AddExplosion(gasCoords.x, gasCoords.y, gasCoords.z, 21, 1.5, true, false, 1)
-                        end
-                    end
-                end
-            end
-            TriggerServerEvent('cb-unionheist:server:BlowCageDoor', cage)
+            Wait(4000)
+            doingSomething = false
+            ClearPedTasks(ped)
+            Wait(48000) -- TODO: Change to 52000
             if Config.DoorLocations[cage].blowUp then
                 AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 43, 0.8, true, false, 1)
             end
-            doingSomething = false
-            ClearPedTasks(ped)
+            TriggerServerEvent('cb-unionheist:server:BlowCageDoor', cage)
         end
     else
         Notify("Headaches", "You need to exit the depository and re-enter!", "error")
@@ -376,7 +366,7 @@ function CreateCageDoors()
                             end
                         end,
                         canInteract = function()
-                            return HasItemClient(Config.DoorLocations[k].required.item, Config.DoorLocations[k].required.amount)
+                            return HasItemClient(Config.DoorLocations[k].required.item, Config.DoorLocations[k].required.amount) and not doingSomething
                         end,
                         distance = 2.5,
                     }
@@ -490,7 +480,6 @@ RegisterNetEvent('cb-unionheist:client:BlowCageDoor', function(cage)
         local cageCoords = Config.DoorLocations[cage].coords
         local entity = GetClosestObjectOfType(cageCoords.x, cageCoords.y, cageCoords.z, 0.05, Config.DoorLocations[cage].modelHash, false, false, false)
         CreateModelHide(cageCoords.x, cageCoords.y, cageCoords.z, 0.05, Config.DoorLocations[cage].modelHash, false)
-        --FreezeEntityPosition(entity, false)
     end
 end)
 
@@ -506,9 +495,7 @@ RegisterNetEvent('cb-unionheist:client:SyncLoot', function(lootKey, model)
         for k, v in pairs(Config.Loot[lootKey].models) do
             if v.model == model then
                 newModel = v.newModel
-                -- Swap models
                 CreateModelSwap(lootCoords.x, lootCoords.y, lootCoords.z, 0.05, GetHashKey(model), GetHashKey(newModel), false)
-                -- Remove zone targeting
                 local zoneId = "UnionHeist_Loot_"..lootKey
                 exports.ox_target:removeZone(zoneId)
                 break
@@ -636,4 +623,8 @@ end, false)
 
 RegisterCommand("exitHeist", function()
     ExitHeist()
+end, false)
+
+RegisterCommand("blowvault", function()
+    TriggerServerEvent('cb-unionheist:server:BlowVaultDoor2')
 end, false)
