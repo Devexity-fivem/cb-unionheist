@@ -21,3 +21,18 @@ client_scripts {
 server_scripts {
 	'server/*.lua'
 }
+
+/* Open Source */
+escrow_ignore {
+	'client/*.lua',
+	'server/*.lua',
+	'shared/*.lua'
+}
+
+/* Escrow
+escrow_ignore {
+	'client/framework.lua',
+	'server/framework.lua',
+	'shared/*.lua'
+}
+*/

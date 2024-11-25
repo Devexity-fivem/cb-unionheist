@@ -66,6 +66,25 @@ function SpawnMissionPeds()
 end
 
 function RobCopAnim(targetPed, guard)
+    if lib.progressBar({
+        duration = Config.Guards[guard].robDuration,
+        label = "Robbing Guard",
+        useWhileDead = false,
+        canCancel = true,
+        disable = {
+            car = true,
+        },
+        anim = {
+            dict = 'anim@gangops@facility@servers@bodysearch@',
+            clip = 'player_search'
+        },
+    }) then
+        TriggerServerEvent('cb-unionheist:server:RobGuard', guard)
+    else
+        Notify("Art Heist", "You cancelled the action", "error")
+    end
+    -- TODO: Need to find a way to make the networked scene better
+    /*
     if not DoesEntityExist(targetPed) or IsPedAPlayer(targetPed) then
         return
     end
@@ -98,6 +117,7 @@ function RobCopAnim(targetPed, guard)
     RemoveAnimDict(animDict)
     SetModelAsNoLongerNeeded(propModel)
     RemoveNamedPtfxAsset(ptfxAsset)
+    */
 end
 
 function BlowVaultDoor()

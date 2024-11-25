@@ -13,12 +13,12 @@ Config.Guards = {
         armor = 100,
         combatMovement = 2, -- {0 = Stationary | 1 = Defensive | 2 = Offensive | 3 = Suicidal Offensive}
         rewardsToGive = {min = 1, max = 2},
+        robDuration = 10000,
         rewards = {
             [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
             [2] = {item = "ammo-rifle2", minAmount = 1, maxAmount = 1, chance = 20},
         }
     },
-    --[[
     [2] = {
         coords = vec4(-8.18, -680.37, 16.13, 253.6),
         model = "s_m_m_security_01",
@@ -89,7 +89,6 @@ Config.Guards = {
             [2] = {item = "ammo-rifle2", minAmount = 1, maxAmount = 1, chance = 20},
         }
     }
-    ]]
 }
 
 Config.Vault = {
@@ -109,7 +108,6 @@ Config.HackLocations = {
         pedHeading = 80,
         debug = false,
     },
-    --[[
     [2] = {
         coords = vec4(-5.40, -700.61, 16.5, 161.25),
         size = vec3(1, 0.5, 2),
@@ -138,7 +136,6 @@ Config.HackLocations = {
         pedHeading = 80,
         debug = false,
     }
-    ]]
 }
 
 Config.DoorLocations = {
