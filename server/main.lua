@@ -42,6 +42,7 @@ function ResetHeistLoop()
     securityHacked = {}
     robbedGuards = {}
     TriggerClientEvent('cb-unionheist:client:ResetHeist', -1)
+    CreateLootBasedOnChance()
 end
 
 RegisterNetEvent('cb-unionheist:server:BlowVaultDoor', function()
