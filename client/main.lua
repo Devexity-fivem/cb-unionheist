@@ -158,12 +158,16 @@ function BlowVaultDoor()
                 DeleteObject(bag)
                 SetPedComponentVariation(ped, 5, 45, 0, 0)
                 NetworkStopSynchronisedScene(bagscene)
-                AddExplosion(vaultCoords.x-1.75, vaultCoords.y+0.8, vaultCoords.z, 22, 0.8, true, false, 1)
+                if Config.Vault.thermiteExplosion then
+                    AddExplosion(vaultCoords.x-1.75, vaultCoords.y+0.8, vaultCoords.z, Config.Vault.thermiteExplosion, 0.8, true, false, 1)
+                end
                 TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro", 8.0, 8.0, 1000, 36, 1, false, false, false)
                 TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_loop", 8.0, 8.0, 3000, 49, 1, false, false, false)
                 -- Add Evidence
                 Wait(52000)
-                AddExplosion(vaultCoords.x-1.75, vaultCoords.y, vaultCoords.z, 2, 0.8, true, false, 1)
+                if Config.Vault.explosion then
+                    AddExplosion(vaultCoords.x-1.75, vaultCoords.y, vaultCoords.z, Config.Vault.explosion, 0.8, true, false, 1)
+                end
                 TriggerServerEvent('cb-unionheist:server:BlowVaultDoor')
                 NotifyCops()
                 SpawnMissionPeds()
@@ -240,7 +244,9 @@ function BlowCageDoor(cage)
             NetworkStopSynchronisedScene(lootscene)
             local explosionYModifier = Config.DoorLocations[cage].explosionYModifier
             local explosionXModifier = Config.DoorLocations[cage].explosionXModifier
-            AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 22, 0.8, true, false, 1)
+            if Config.DoorLocations[cage].thermiteExplosion then
+                AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, Config.DoorLocations[cage].thermiteExplosion, 0.8, true, false, 1)
+            end
             TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro", 8.0, 8.0, 1000, 36, 1, false, false, false)
             TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_loop", 8.0, 8.0, 3000, 49, 1, false, false, false)
             -- Add Evidence
@@ -249,7 +255,7 @@ function BlowCageDoor(cage)
             ClearPedTasks(ped)
             Wait(48000) -- TODO: Change to 52000
             if Config.DoorLocations[cage].blowUp then
-                AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, 43, 0.8, true, false, 1)
+                AddExplosion(cageCoords.x+explosionXModifier, cageCoords.y+explosionYModifier, cageCoords.z, Config.DoorLocations[cage].blowUp, 0.8, true, false, 1)
             end
             TriggerServerEvent('cb-unionheist:server:BlowCageDoor', cage)
         end
