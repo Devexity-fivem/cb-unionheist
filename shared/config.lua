@@ -2,6 +2,7 @@ Config = {}
 Config.TeleportIn = vec4(5.79, -709.24, 16.13, 341.16)
 Config.TeleportOut = vec4(10.23, -667.79, 33.45, 359.0)
 Config.ResetTime = 15 -- In minutes, how long after the Vault is blown does the Heist reset
+Config.MinimumPolice = 2 -- Minimum number of police required
 
 Config.Guards = {
     [1] = {
