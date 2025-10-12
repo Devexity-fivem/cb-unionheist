@@ -66,14 +66,19 @@ function SpawnMissionPeds()
 end
 
 function RobCopAnim(targetPed, guard)
+    if not guard or not Config.Guards[guard] then
+        print(('[ERROR] Invalid guard passed to RobCopAnim: %s'):format(tostring(guard)))
+        return
+    end
+
+    local duration = Config.Guards[guard].robDuration or 5000
+
     if lib.progressBar({
-        duration = Config.Guards[guard].robDuration,
+        duration = duration,
         label = "Robbing Guard",
         useWhileDead = false,
         canCancel = true,
-        disable = {
-            car = true,
-        },
+        disable = { car = true },
         anim = {
             dict = 'anim@gangops@facility@servers@bodysearch@',
             clip = 'player_search'
@@ -83,6 +88,7 @@ function RobCopAnim(targetPed, guard)
     else
         Notify("Art Heist", "You cancelled the action", "error")
     end
+
     -- TODO: Need to find a way to make the networked scene better
     /*
     if not DoesEntityExist(targetPed) or IsPedAPlayer(targetPed) then
