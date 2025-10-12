@@ -27,6 +27,7 @@ Config.Guards = {
         health = 300,
         armor = 100,
         combatMovement = 2,
+        robDuration = 10000,
         rewardsToGive = {min = 1, max = 2},
         rewards = {
             [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
@@ -41,6 +42,7 @@ Config.Guards = {
         health = 300,
         armor = 100,
         combatMovement = 2,
+        robDuration = 10000,
         rewardsToGive = {min = 1, max = 2},
         rewards = {
             [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
@@ -55,6 +57,7 @@ Config.Guards = {
         health = 300,
         armor = 100,
         combatMovement = 2,
+        robDuration = 10000,
         rewardsToGive = {min = 1, max = 2},
         rewards = {
             [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
@@ -69,6 +72,7 @@ Config.Guards = {
         health = 300,
         armor = 100,
         combatMovement = 2,
+        robDuration = 10000,
         rewardsToGive = {min = 1, max = 2},
         rewards = {
             [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
@@ -83,6 +87,7 @@ Config.Guards = {
         health = 300,
         armor = 100,
         combatMovement = 2,
+        robDuration = 10000,
         rewardsToGive = {min = 1, max = 2},
         rewards = {
             [1] = {item = "ammo-rifle", minAmount = 1, maxAmount = 1, chance = 80},
