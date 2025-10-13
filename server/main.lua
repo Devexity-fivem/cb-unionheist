@@ -7,13 +7,11 @@ local securityHacked = {}
 local robbedGuards = {}
 
 function CreateLootBasedOnChance()
-    lootResults = {} -- Initialize lootResults table
+    lootResults = {}
     for k, v in pairs(Config.Loot) do
-        local roll = math.random(100) -- Roll a random number between 1 and 100
-        local cumulativeChance = 0 -- Initialize cumulative chance
-        local selectedModel = nil -- Default to no model
-
-        -- Determine which model (if any) to spawn
+        local roll = math.random(100)
+        local cumulativeChance = 0
+        local selectedModel = nil
         for _, modelData in ipairs(v.models) do
             cumulativeChance = cumulativeChance + modelData.chance
             if roll <= cumulativeChance then
@@ -21,12 +19,10 @@ function CreateLootBasedOnChance()
                 break
             end
         end
-
-        -- Add the result for this location, using the key from Config.Loot
-        lootResults[k] = { -- Ensure the key in lootResults matches the Config.Loot key
+        lootResults[k] = {
             coords = v.coords,
             size = v.size,
-            cage = v.cage, -- Include cage if needed
+            cage = v.cage,
             model = selectedModel
         }
     end
@@ -44,6 +40,17 @@ function ResetHeistLoop()
     TriggerClientEvent('cb-unionheist:client:ResetHeist', -1)
     CreateLootBasedOnChance()
 end
+
+lib.callback.register('cb-unionheist:server:CheckPoliceCount', function(source)
+    local policeCount = 0
+    local players = exports.qbx_core:GetQBPlayers()
+    for _, player in pairs(players) do
+        if player.PlayerData.job.type == "leo" and player.PlayerData.job.onduty then
+            policeCount = policeCount + 1
+        end
+    end
+    return policeCount >= Config.MinimumPolice
+end)
 
 RegisterNetEvent('cb-unionheist:server:BlowVaultDoor', function()
     local allSecurityHacked = true
@@ -79,21 +86,14 @@ end)
 RegisterNetEvent('cb-unionheist:server:RobGuard', function(guard)
     local guardConfig = Config.Guards[guard]
     if guardConfig and guardConfig.rewards then
-        -- Number of rewards to give, randomized within the specified range
         local rewardsToGive = math.random(guardConfig.rewardsToGive.min, guardConfig.rewardsToGive.max)
-
-        -- Calculate the total chance for cumulative logic
         local totalChance = 0
         for _, reward in ipairs(guardConfig.rewards) do
             totalChance = totalChance + reward.chance
         end
-
-        -- Loop to give the randomized number of rewards
         for i = 1, rewardsToGive do
-            local randomPick = math.random(1, totalChance) -- Random number between 1 and totalChance
+            local randomPick = math.random(1, totalChance)
             local cumulativeChance = 0
-
-            -- Determine which reward corresponds to the random number
             for _, reward in ipairs(guardConfig.rewards) do
                 cumulativeChance = cumulativeChance + reward.chance
                 if randomPick <= cumulativeChance then
@@ -104,7 +104,7 @@ RegisterNetEvent('cb-unionheist:server:RobGuard', function(guard)
                         robbedGuards[guard] = true
                         TriggerClientEvent('cb-unionheist:client:RobGuard', -1, guard)
                     end
-                    break -- Stop once the reward is given
+                    break
                 end
             end
         end
@@ -115,21 +115,15 @@ RegisterNetEvent('cb-unionheist:server:LootStolen', function(key)
     local src = source
     local rewardConfig
     local newModel
-
-    -- Check if the vault is blown
     if vaultBlown then
-        -- Iterate through Config.Loot to find the matching key
         for k, v in pairs(Config.Loot) do
             if key == k then
-                -- Get the reward configuration for the loot model
                 for lootModel, rewards in pairs(Config.LootRewards) do
                     if lootModel == lootResults[k].model then
                         rewardConfig = rewards
                     end
                 end
-
                 if rewardConfig then
-                    -- Distribute rewards to the player based on the reward configuration
                     for _, reward in pairs(rewardConfig) do
                         if math.random(100) <= reward.chance then
                             local rewardAmount = math.random(reward.min, reward.max)
@@ -144,7 +138,6 @@ RegisterNetEvent('cb-unionheist:server:LootStolen', function(key)
                                             newModel = modelData.newModel
                                         end
                                     end
-
                                     lootResults[k].model = newModel
                                 end
                             end
@@ -153,8 +146,6 @@ RegisterNetEvent('cb-unionheist:server:LootStolen', function(key)
                 end
             end
         end
-    else
-        return
     end
 end)
 
