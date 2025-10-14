@@ -573,6 +573,7 @@ function StealLoot(key, modelHash, coords)
         canCancel = true,
         disable = {
             car = true,
+            move = true,
         },
         anim = {
             dict = 'anim@heists@ornate_bank@grab_cash',
