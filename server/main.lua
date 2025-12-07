@@ -185,7 +185,7 @@ RegisterNetEvent('cb-unionheist:server:BlowCageDoor', function(cage)
     if not hasPayment then
         return
     end
-    if not isWithinDistance(src, cageConfig.coords, 10.0) then
+    if not isWithinDistance(src, cageConfig.coords, 30.0) then
         return
     end
     blownCageDoors[cage] = true
