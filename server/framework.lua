@@ -92,11 +92,14 @@ end
 function RemoveItem(source, item, amount)
     if not UsingOxInventory then
         local Player = GetPlayer(source)
-        Player.Functions.RemoveItem(item, amount)
-        return true
+        if not Player or not Player.Functions then
+            return false
+        end
+        local removed = Player.Functions.RemoveItem(item, amount)
+        return removed == true
     elseif UsingOxInventory then
-        exports.ox_inventory:RemoveItem(source, item, amount)
-        return true
+        local removed = exports.ox_inventory:RemoveItem(source, item, amount)
+        return removed ~= nil and removed ~= false
     end
     return false
 end
@@ -104,13 +107,16 @@ end
 function AddItem(source, item, amount)
     if not UsingOxInventory then
         local Player = GetPlayer(source)
-        Player.Functions.AddItem(item, amount)
-        return true
+        if not Player or not Player.Functions then
+            return false
+        end
+        local added = Player.Functions.AddItem(item, amount)
+        return added == true
     elseif UsingOxInventory then
         local canCarryItem = exports.ox_inventory:CanCarryItem(source, item, amount)
         if canCarryItem then
-            exports.ox_inventory:AddItem(source, item, amount)
-            return true
+            local added = exports.ox_inventory:AddItem(source, item, amount)
+            return added ~= nil and added ~= false
         else
             TriggerClientEvent('cb-unionheist:client:NotEnoughSpace', source)
             return false
